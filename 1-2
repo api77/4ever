@@ -1,0 +1,121 @@
+```html
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM тапсырмалары</title>
+
+    <style>
+        .new-div {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: lightblue;
+        }
+
+        .active {
+            background-color: green;
+            color: white;
+        }
+
+        .changed {
+            color: red;
+            font-size: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ID бойынша өзгертілетін элемент -->
+    <h2 id="my-element">Ескі мәтін</h2>
+
+    <!-- Жойылатын элемент -->
+    <div class="old-element">
+        Бұл элемент жойылады
+    </div>
+
+    <!-- active класы қосылатын элемент -->
+    <div id="class-element">
+        Бұл элементтің класын басқарыңыз
+    </div>
+
+    <button id="class-button">active класын өзгерту</button>
+
+    <script>
+        // =========================
+        // Тапсырма 1
+        // =========================
+
+        // 1. ID бойынша элементті тауып,
+        // оның мәтінін "Сәлем, әлем!" деп өзгерту
+        const element = document.getElementById("my-element");
+        element.textContent = "Сәлем, әлем!";
+
+
+        // 2. new-div класымен жаңа div жасау
+        // және оны body соңына қосу
+        const newDiv = document.createElement("div");
+
+        newDiv.className = "new-div";
+        newDiv.textContent = "Мен жаңа элементпін";
+
+        document.body.appendChild(newDiv);
+
+
+        // 3. old-element класы бар элементті жою
+        const oldElement = document.querySelector(".old-element");
+
+        if (oldElement) {
+            oldElement.remove();
+        }
+
+
+        // 4. "Бұл ауыспалы абзац" мәтіні бар p элементін жасау
+        const paragraph = document.createElement("p");
+
+        paragraph.textContent = "Бұл ауыспалы абзац";
+
+        document.body.appendChild(paragraph);
+
+
+        // 5. Абзацты басқанда мәтін түсі мен
+        // қаріп өлшемін өзгерту
+        paragraph.addEventListener("click", function () {
+            paragraph.classList.toggle("changed");
+        });
+
+
+        // =========================
+        // Тапсырма 2
+        // =========================
+
+        const classElement = document.getElementById("class-element");
+        const button = document.getElementById("class-button");
+
+        // active класын қосу немесе жою
+        button.addEventListener("click", function () {
+            classElement.classList.toggle("active");
+
+            // Барлық кластарды консольге шығару
+            console.log("Элемент кластары:", classElement.classList);
+
+            // Барлық кластарды бөлек <p> тегіне шығару
+            const classParagraph = document.createElement("p");
+
+            classParagraph.textContent =
+                "Барлық кластары: " +
+                Array.from(classElement.classList).join(", ");
+
+            document.body.appendChild(classParagraph);
+        });
+    </script>
+
+</body>
+</html>
+```
+
+**Негізгі қолданылған әдістер:**
+
+* `getElementById()` — ID арқылы элементті табу.
+* `createElement()` — жаңа элемент жасау.
+* `appendChild()` — элементті `body` соңын
