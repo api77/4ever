@@ -238,7 +238,7 @@
 
             <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700/50 space-y-3">
                 <h3 class="font-semibold text-amber-300 text-lg">2. Жаңа div элементін жасау</h3>
-                <p class="text-xs text-slate-400">Батырманы басқанда new-div класы бар жаңа блок body-дың соңына (беттің ең төменгі жағына) қосылады.</p>
+                <p class="text-xs text-slate-400">Батырманы басқанда new-div класы бар жаңа блок body-дың соңына қосылады.</p>
                 <button onclick="addNewDiv()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-lg transition duration-200">
                     Жаңа элементті қосу
                 </button>
@@ -267,22 +267,30 @@
         <section id="t2" class="tab-content space-y-6">
             <div class="border-b border-slate-700 pb-3">
                 <h2 class="text-2xl font-bold text-cyan-400">2-тапсырма (Т2) — Элемент кластарымен жұмыс</h2>
-                <p class="text-slate-400 text-sm">Кластарды ауыстыру және classList ақпаратын консольге/параққа шығару.</p>
+                <p class="text-slate-400 text-sm">Кластарды ауыстыру, жаңа класс қосу және classList ақпаратын шығару.</p>
             </div>
 
             <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700/50 space-y-5">
-                <h3 class="font-semibold text-cyan-300 text-lg">1. Active класын қосу/жою (Toggle) және Кластар тізімі</h3>
+                <h3 class="font-semibold text-cyan-300 text-lg">1. Active класын қосу/жою (Toggle) және Басқару</h3>
 
                 <div id="demo-box" class="toggle-box demo-element-class my-box-style">
                     <p class="font-semibold text-lg" id="box-status">Статус: Active емес</p>
-                    <p class="text-xs text-slate-400 mt-1">Осы блоктың кластары батырма арқылы өңделеді.</p>
+                    <p class="text-xs text-slate-400 mt-1">Осы блоктың кластары батырмалар арқылы өңделеді.</p>
                 </div>
 
-                <div class="flex flex-wrap gap-3">
-                    <button onclick="toggleActiveClass()" class="px-5 py-2.5 bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold rounded-xl transition duration-200">
+                <!-- ЖАҢА КЛАСС ҚОСУ ӨРІСІ МЕН БАТЫРМАЛАРАР -->
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="custom-class-input" placeholder="Жаңа класс атауын жазыңыз..." class="flex-1 px-4 py-2 bg-slate-950 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500 text-sm">
+                    <button onclick="addClassCustom()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition duration-200 text-sm">
+                        + Класс қосу
+                    </button>
+                </div>
+
+                <div class="flex flex-wrap gap-3 pt-2">
+                    <button onclick="toggleActiveClass()" class="px-5 py-2.5 bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold rounded-xl transition duration-200 text-sm">
                         "active" класын Toggle ету
                     </button>
-                    <button onclick="logAndDisplayClasses()" class="px-5 py-2.5 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-xl transition duration-200">
+                    <button onclick="logAndDisplayClasses()" class="px-5 py-2.5 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-xl transition duration-200 text-sm">
                         Кластар тізімін шығару (Console & UI)
                     </button>
                 </div>
@@ -373,6 +381,21 @@
             }
 
             logAndDisplayClasses();
+        }
+
+        // ЖАҢА КЛАСС ҚОСУ ФУНКЦИЯСЫ
+        function addClassCustom() {
+            const box = document.getElementById("demo-box");
+            const input = document.getElementById("custom-class-input");
+            const className = input.value.trim();
+
+            if (className) {
+                box.classList.add(className);
+                input.value = ""; // Өрісті тазалау
+                logAndDisplayClasses(); // Тізімді автоматты түрде жаңарту
+            } else {
+                alert("Өтініш, класс атауын енгізіңіз!");
+            }
         }
 
         // КӘДІМГІ ТІЗІМ (<ul><li>) РЕТІНДЕ ШЫҒАРУ ФУНКЦИЯСЫ
