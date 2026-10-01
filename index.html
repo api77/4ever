@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>4EVER Командасы & Тапсырмалар</title>
+    <script>
+        (function () {
+            var dark = false;
+            try {
+                var t = localStorage.getItem('4ever-theme');
+                dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            } catch (e) {}
+            if (dark) document.documentElement.classList.add('dark');
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -85,9 +95,71 @@
             user-select: none;
             transition: all 0.3s ease;
         }
+
+        /* ===== 4-ТАПСЫРМА: ТАҚЫРЫП ===== */
+        :root { --cell-bg: #ffffff; --cell-border: #94a3b8; --cell-text: #334155; color-scheme: light; }
+        html.dark { --cell-bg: #0f172a; --cell-border: #475569; --cell-text: #cbd5e1; color-scheme: dark; }
+
+        /* Бастапқы стильдер қараңғы тақырыпқа жазылған, сондықтан жарық тақырып үшін ауыстырамыз */
+        html:not(.dark) body { background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%); color: #0f172a; }
+        html:not(.dark) h2.text-white { color: #0f172a; }
+        html:not(.dark) .text-slate-200 { color: #1e293b; }
+        html:not(.dark) .text-slate-300 { color: #334155; }
+        html:not(.dark) .text-slate-400 { color: #475569; }
+        html:not(.dark) .text-slate-500 { color: #64748b; }
+        html:not(.dark) .hover\:text-white:hover { color: #0f172a; }
+        html:not(.dark) [class*="text-indigo-400"] { color: #4f46e5; }
+        html:not(.dark) [class*="text-indigo-300"] { color: #4338ca; }
+        html:not(.dark) [class*="text-purple-400"] { color: #9333ea; }
+        html:not(.dark) [class*="text-purple-300"] { color: #7e22ce; }
+        html:not(.dark) [class*="text-pink-400"] { color: #db2777; }
+        html:not(.dark) [class*="text-pink-300"] { color: #be185d; }
+        html:not(.dark) [class*="text-emerald-400"] { color: #059669; }
+        html:not(.dark) [class*="text-emerald-300"] { color: #047857; }
+        html:not(.dark) [class*="text-amber-400"] { color: #d97706; }
+        html:not(.dark) [class*="text-amber-300"] { color: #b45309; }
+        html:not(.dark) [class*="text-cyan-400"] { color: #0891b2; }
+        html:not(.dark) [class*="text-cyan-300"] { color: #0e7490; }
+        html:not(.dark) [class*="text-rose-400"] { color: #e11d48; }
+        html:not(.dark) .tab-btn.active-tab,
+        html:not(.dark) .tab-btn.active-tab:hover { color: #ffffff; }
+        html:not(.dark) [class*="bg-slate-800"] { background-color: rgba(255, 255, 255, 0.7); }
+        html:not(.dark) [class*="bg-slate-900"] { background-color: #f1f5f9; }
+        html:not(.dark) [class*="bg-slate-950"] { background-color: #ffffff; }
+        html:not(.dark) [class*="border-slate-700"] { border-color: #cbd5e1; }
+        html:not(.dark) .bg-indigo-900\/50 { background-color: #e0e7ff; }
+        html:not(.dark) .toggle-box:not(.active) { background-color: #e2e8f0; border-color: #94a3b8; }
+
+        /* Абзац (Т1): инлайн стильдердің орнына класс */
+        .interactive-p.p-active { color: #f59e0b; font-size: 1.25rem; font-weight: 700; background-color: #1e1b4b; }
+        html:not(.dark) .interactive-p.p-active { color: #b45309; background-color: #fef3c7; }
+
+        /* Ауыстырып-қосқыш */
+        .theme-switch { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.9rem 0.4rem 0.5rem; border-radius: 9999px; border: 1px solid #cbd5e1; background: rgba(255, 255, 255, 0.9); color: #0f172a; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+        html.dark .theme-switch { background: rgba(30, 41, 59, 0.9); border-color: #475569; color: #f1f5f9; }
+        .theme-switch:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
+        .theme-switch-track { position: relative; width: 2.5rem; height: 1.4rem; border-radius: 9999px; background: #cbd5e1; transition: background 0.25s; }
+        .theme-switch-thumb { position: absolute; top: 0.15rem; left: 0.15rem; width: 1.1rem; height: 1.1rem; border-radius: 50%; background: #ffffff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35); transition: transform 0.25s; }
+        .theme-switch[aria-checked="true"] .theme-switch-track { background: #6366f1; }
+        .theme-switch[aria-checked="true"] .theme-switch-thumb { transform: translateX(1.1rem); }
+
+        /* ===== 3-ТАПСЫРМА: КЕСТЕ ===== */
+        .color-table { border-collapse: collapse; margin: 0 auto; }
+        .color-table td { min-width: 3rem; height: 2.75rem; padding: 0.25rem 0.5rem; text-align: center; font-size: 0.75rem; border: 1px solid var(--cell-border); background: var(--cell-bg); color: var(--cell-text); cursor: pointer; user-select: none; transition: background-color 0.2s; }
+        .color-table td:hover { outline: 2px solid #6366f1; outline-offset: -2px; }
+        .swatch { width: 2rem; height: 2rem; border-radius: 0.6rem; border: 2px solid transparent; cursor: pointer; }
+        .swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #6366f1; }
+        html.dark .swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px #0f172a, 0 0 0 4px #818cf8; }
     </style>
 </head>
 <body class="p-4 md:p-8 flex flex-col items-center justify-start min-h-screen">
+
+    <div class="w-full max-w-4xl flex justify-end mb-4">
+        <button type="button" class="theme-switch" role="switch" aria-checked="false" aria-label="Қараңғы тақырыпты қосу/өшіру" onclick="toggleTheme()">
+            <span class="theme-switch-track"><span class="theme-switch-thumb"></span></span>
+            Қараңғы тақырып
+        </button>
+    </div>
 
     <header class="text-center mb-8">
         <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 mb-2">
@@ -103,6 +175,8 @@
         <button onclick="openTab(event, 'zhansaya')" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm md:text-base text-slate-300 hover:text-white">Жансая</button>
         <button onclick="openTab(event, 't1')" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm md:text-base text-amber-400 hover:text-amber-300">Т1 (1-тапсырма)</button>
         <button onclick="openTab(event, 't2')" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm md:text-base text-cyan-400 hover:text-cyan-300">Т2 (2-тапсырма)</button>
+        <button onclick="openTab(event, 't3')" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm md:text-base text-emerald-400 hover:text-emerald-300">Т3 (3-тапсырма)</button>
+        <button onclick="openTab(event, 't4')" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm md:text-base text-pink-400 hover:text-pink-300">Т4 (4-тапсырма)</button>
     </nav>
 
     <main class="w-full max-w-4xl bg-slate-800/50 backdrop-blur-xl border border-slate-700/60 rounded-3xl p-6 md:p-8 shadow-2xl">
@@ -305,6 +379,68 @@
             </div>
         </section>
 
+
+        <!-- Т3 ВКЛАДКАСЫ (3-тапсырма) -->
+        <section id="t3" class="tab-content space-y-6">
+            <div class="border-b border-slate-700 pb-3">
+                <h2 class="text-2xl font-bold text-emerald-400">3-тапсырма (Т3) — Түсті кесте</h2>
+                <p class="text-slate-400 text-sm">Өлшемін енгізіп кесте құрыңыз, ұяшықты басып бояңыз, содан кейін түс бойынша санаңыз.</p>
+            </div>
+
+            <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700/50 space-y-3">
+                <h3 class="font-semibold text-emerald-300 text-lg">1. Кесте өлшемі</h3>
+                <div class="flex flex-wrap items-end gap-3">
+                    <label class="text-sm text-slate-300">Жолдар
+                        <input id="rows-input" type="number" min="1" max="20" value="5" class="block mt-1 w-24 px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-slate-200 text-sm focus:outline-none focus:border-emerald-500">
+                    </label>
+                    <label class="text-sm text-slate-300">Бағандар
+                        <input id="cols-input" type="number" min="1" max="20" value="5" class="block mt-1 w-24 px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-slate-200 text-sm focus:outline-none focus:border-emerald-500">
+                    </label>
+                    <button onclick="buildTableFromInputs()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition duration-200 text-sm">Кесте құру</button>
+                </div>
+                <p id="table-message" class="text-sm text-rose-400 min-h-[1.25rem]"></p>
+            </div>
+
+            <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700/50 space-y-3">
+                <h3 class="font-semibold text-emerald-300 text-lg">2. Түс таңдау және бояу</h3>
+                <p class="text-xs text-slate-400">Түсті таңдап, ұяшықты басыңыз. Сол түсті ұяшықты қайта бассаңыз, түс алынады.</p>
+                <div class="flex flex-wrap items-center gap-2">
+                    <div id="palette" class="flex flex-wrap gap-2"></div>
+                    <input id="color-picker" type="color" value="#ef4444" aria-label="Өз түсіңізді таңдаңыз" class="w-10 h-8 rounded-lg cursor-pointer bg-transparent">
+                </div>
+                <div id="table-container" class="overflow-x-auto pt-2"></div>
+            </div>
+
+            <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700/50 space-y-3">
+                <h3 class="font-semibold text-emerald-300 text-lg">3. Түс бойынша санау</h3>
+                <div class="flex flex-wrap items-center gap-3">
+                    <button onclick="showCount()" class="px-5 py-2.5 bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-bold rounded-xl transition duration-200 text-sm">Таңдалған түстегі ұяшықтарды санау</button>
+                    <span id="count-result" class="text-sm text-slate-200 flex items-center gap-2"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Т4 ВКЛАДКАСЫ (4-тапсырма) -->
+        <section id="t4" class="tab-content space-y-6">
+            <div class="border-b border-slate-700 pb-3">
+                <h2 class="text-2xl font-bold text-pink-400">4-тапсырма (Т4) — Қараңғы тақырып</h2>
+                <p class="text-slate-400 text-sm">Ауыстырып-қосқышты басқанда бүкіл беттің түс режимі өзгереді.</p>
+            </div>
+
+            <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700/50 space-y-4">
+                <div class="flex flex-wrap items-center gap-4">
+                    <button type="button" class="theme-switch" role="switch" aria-checked="false" aria-label="Қараңғы тақырыпты қосу/өшіру" onclick="toggleTheme()">
+                        <span class="theme-switch-track"><span class="theme-switch-thumb"></span></span>
+                        Қараңғы тақырып
+                    </button>
+                    <span id="theme-status" class="text-sm text-slate-200"></span>
+                </div>
+                <p class="text-xs text-slate-400">
+                    Қосқыш <code>html</code> элементіне <code>dark</code> класын қосады/алады. Таңдау браузерде сақталады, ал алғашқы кіргенде құрылғының жүйелік режимі қолданылады.
+                </p>
+            </div>
+        </section>
+
     </main>
 
     <script>
@@ -350,22 +486,8 @@
             }
         }
 
-        let isStyleChanged = false;
         function toggleParagraphStyle() {
-            const p = document.getElementById("interactive-paragraph");
-            if (!isStyleChanged) {
-                p.style.color = "#f59e0b";
-                p.style.fontSize = "1.25rem";
-                p.style.fontWeight = "bold";
-                p.style.backgroundColor = "#1e1b4b";
-                isStyleChanged = true;
-            } else {
-                p.style.color = "#cbd5e1";
-                p.style.fontSize = "1rem";
-                p.style.fontWeight = "normal";
-                p.style.backgroundColor = "#1e293b";
-                isStyleChanged = false;
-            }
+            document.getElementById("interactive-paragraph").classList.toggle("p-active");
         }
 
         function toggleActiveClass() {
@@ -416,6 +538,135 @@
                 outputList.appendChild(li);
             });
         }
+
+        // ===== 4-ТАПСЫРМА: ҚАРАҢҒЫ ТАҚЫРЫП =====
+        function applyTheme(isDark) {
+            document.documentElement.classList.toggle("dark", isDark);
+            document.querySelectorAll(".theme-switch").forEach(btn => {
+                btn.setAttribute("aria-checked", String(isDark));
+            });
+            const status = document.getElementById("theme-status");
+            if (status) status.textContent = isDark ? "Қазір: қараңғы тақырып" : "Қазір: жарық тақырып";
+        }
+
+        function toggleTheme() {
+            const isDark = !document.documentElement.classList.contains("dark");
+            applyTheme(isDark);
+            try { localStorage.setItem("4ever-theme", isDark ? "dark" : "light"); } catch (e) {}
+        }
+
+        applyTheme(document.documentElement.classList.contains("dark"));
+
+        // ===== 3-ТАПСЫРМА: ТҮСТІ КЕСТЕ =====
+        const PALETTE = ["#ef4444", "#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#ec4899"];
+        let selectedColor = PALETTE[0];
+
+        // Кез келген CSS түсін "rgb(r, g, b)" түріне келтіреді (салыстыру үшін)
+        function normalizeColor(color) {
+            const probe = document.createElement("span");
+            probe.style.color = color;
+            document.body.appendChild(probe);
+            const rgb = getComputedStyle(probe).color;
+            probe.remove();
+            return rgb;
+        }
+
+        // Фон түсіне қарай мәтін түсін таңдайды (оқылу үшін)
+        function textColorFor(rgb) {
+            const [r, g, b] = rgb.match(/\d+/g).map(Number);
+            return (r * 299 + g * 587 + b * 114) / 1000 > 150 ? "#0f172a" : "#ffffff";
+        }
+
+        // Көрсетілген өлшемдегі кесте құрады
+        function createTable(rows, cols) {
+            const table = document.createElement("table");
+            table.className = "color-table";
+            for (let r = 0; r < rows; r++) {
+                const tr = table.insertRow();
+                for (let c = 0; c < cols; c++) {
+                    tr.insertCell().textContent = (r + 1) + "," + (c + 1);
+                }
+            }
+            document.getElementById("table-container").replaceChildren(table);
+            return table;
+        }
+
+        // Пайдаланушы енгізген жол/баған санын тексеріп, кестені құрады
+        function buildTableFromInputs() {
+            const rows = parseInt(document.getElementById("rows-input").value, 10);
+            const cols = parseInt(document.getElementById("cols-input").value, 10);
+            const message = document.getElementById("table-message");
+            const valid = n => Number.isInteger(n) && n >= 1 && n <= 20;
+
+            if (!valid(rows) || !valid(cols)) {
+                message.textContent = "Жолдар мен бағандар саны 1-ден 20-ға дейінгі бүтін сан болуы керек.";
+                return;
+            }
+            message.textContent = "";
+            createTable(rows, cols);
+            document.getElementById("count-result").textContent = "";
+        }
+
+        // Ұяшықты таңдалған түске бояйды (сол түс болса — түсті алып тастайды)
+        function paintCell(td) {
+            const rgb = normalizeColor(selectedColor);
+            if (td.dataset.color === rgb) {
+                delete td.dataset.color;
+                td.style.backgroundColor = "";
+                td.style.color = "";
+            } else {
+                td.dataset.color = rgb;
+                td.style.backgroundColor = selectedColor;
+                td.style.color = textColorFor(rgb);
+            }
+        }
+
+        // Берілген түстегі ұяшықтар санын қайтарады
+        function countCellsByColor(color) {
+            const target = normalizeColor(color);
+            return Array.from(document.querySelectorAll("#table-container td"))
+                .filter(td => td.dataset.color === target).length;
+        }
+
+        function showCount() {
+            const total = document.querySelectorAll("#table-container td").length;
+            const count = countCellsByColor(selectedColor);
+            const result = document.getElementById("count-result");
+            result.innerHTML = "";
+
+            const dot = document.createElement("span");
+            dot.style.cssText = "display:inline-block;width:1rem;height:1rem;border-radius:0.25rem;background:" + selectedColor;
+            result.append(dot, "Ұяшықтар саны: " + count + " (барлығы: " + total + ")");
+        }
+
+        function selectColor(color) {
+            selectedColor = color;
+            document.getElementById("color-picker").value = color;
+            document.querySelectorAll(".swatch").forEach(s => {
+                s.setAttribute("aria-pressed", String(s.dataset.color === color));
+            });
+        }
+
+        (function initTableTask() {
+            const palette = document.getElementById("palette");
+            PALETTE.forEach(color => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "swatch";
+                btn.dataset.color = color;
+                btn.style.backgroundColor = color;
+                btn.setAttribute("aria-label", "Түс: " + color);
+                btn.addEventListener("click", () => selectColor(color));
+                palette.appendChild(btn);
+            });
+            document.getElementById("color-picker").addEventListener("input", e => selectColor(e.target.value));
+            document.getElementById("table-container").addEventListener("click", e => {
+                const td = e.target.closest("td");
+                if (td) paintCell(td);
+            });
+            selectColor(PALETTE[0]);
+            createTable(5, 5);
+        })();
     </script>
 </body>
 </html>
