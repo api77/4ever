@@ -96,11 +96,9 @@
             transition: all 0.3s ease;
         }
 
-        /* ===== 4-ТАПСЫРМА: ТАҚЫРЫП ===== */
         :root { --cell-bg: #ffffff; --cell-border: #94a3b8; --cell-text: #334155; color-scheme: light; }
         html.dark { --cell-bg: #0f172a; --cell-border: #475569; --cell-text: #cbd5e1; color-scheme: dark; }
 
-        /* Бастапқы стильдер қараңғы тақырыпқа жазылған, сондықтан жарық тақырып үшін ауыстырамыз */
         html:not(.dark) body { background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%); color: #0f172a; }
         html:not(.dark) h2.text-white { color: #0f172a; }
         html:not(.dark) .text-slate-200 { color: #1e293b; }
@@ -130,11 +128,9 @@
         html:not(.dark) .bg-indigo-900\/50 { background-color: #e0e7ff; }
         html:not(.dark) .toggle-box:not(.active) { background-color: #e2e8f0; border-color: #94a3b8; }
 
-        /* Абзац (Т1): инлайн стильдердің орнына класс */
         .interactive-p.p-active { color: #f59e0b; font-size: 1.25rem; font-weight: 700; background-color: #1e1b4b; }
         html:not(.dark) .interactive-p.p-active { color: #b45309; background-color: #fef3c7; }
 
-        /* Ауыстырып-қосқыш */
         .theme-switch { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.9rem 0.4rem 0.5rem; border-radius: 9999px; border: 1px solid #cbd5e1; background: rgba(255, 255, 255, 0.9); color: #0f172a; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
         html.dark .theme-switch { background: rgba(30, 41, 59, 0.9); border-color: #475569; color: #f1f5f9; }
         .theme-switch:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
@@ -143,7 +139,6 @@
         .theme-switch[aria-checked="true"] .theme-switch-track { background: #6366f1; }
         .theme-switch[aria-checked="true"] .theme-switch-thumb { transform: translateX(1.1rem); }
 
-        /* ===== 3-ТАПСЫРМА: КЕСТЕ ===== */
         .color-table { border-collapse: collapse; margin: 0 auto; }
         .color-table td { min-width: 3rem; height: 2.75rem; padding: 0.25rem 0.5rem; text-align: center; font-size: 0.75rem; border: 1px solid var(--cell-border); background: var(--cell-bg); color: var(--cell-text); cursor: pointer; user-select: none; transition: background-color 0.2s; }
         .color-table td:hover { outline: 2px solid #6366f1; outline-offset: -2px; }
@@ -174,7 +169,6 @@
 
     <main class="w-full max-w-4xl bg-slate-800/50 backdrop-blur-xl border border-slate-700/60 rounded-3xl p-6 md:p-8 shadow-2xl">
         
-        <!-- АДИНА -->
         <section id="adina" class="tab-content active-content space-y-6">
             <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden border-2 border-indigo-500/50 shadow-lg flex-shrink-0 bg-slate-900 flex items-center justify-center">
@@ -202,7 +196,6 @@
             </div>
         </section>
 
-        <!-- АҚБОТА -->
         <section id="akbota" class="tab-content space-y-6">
             <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden border-2 border-purple-500/50 shadow-lg flex-shrink-0 bg-slate-900 flex items-center justify-center">
@@ -230,7 +223,6 @@
             </div>
         </section>
 
-        <!-- АЛЬФИЯ -->
         <section id="alfiya" class="tab-content space-y-6">
             <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden border-2 border-pink-500/50 shadow-lg flex-shrink-0 bg-slate-900 flex items-center justify-center">
@@ -258,7 +250,6 @@
             </div>
         </section>
 
-        <!-- ЖАНСАЯ -->
         <section id="zhansaya" class="tab-content space-y-6">
             <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden border-2 border-emerald-500/50 shadow-lg flex-shrink-0 bg-slate-900 flex items-center justify-center">
@@ -286,7 +277,6 @@
             </div>
         </section>
 
-        <!-- Т1 ВКТАДКАСЫ (1-тапсырма) -->
         <section id="t1" class="tab-content space-y-6">
             <div class="border-b border-slate-700 pb-3">
                 <h2 class="text-2xl font-bold text-amber-400">1-тапсырма (Т1) — DOM Элементтерімен Жұмыс</h2>
@@ -330,7 +320,6 @@
             </div>
         </section>
 
-        <!-- Т2 ВКТАДКАСЫ (2-тапсырма) -->
         <section id="t2" class="tab-content space-y-6">
             <div class="border-b border-slate-700 pb-3">
                 <h2 class="text-2xl font-bold text-cyan-400">2-тапсырма (Т2) — Элемент кластарымен жұмыс</h2>
@@ -345,7 +334,6 @@
                     <p class="text-xs text-slate-400 mt-1">Осы блоктың кластары батырмалар арқылы өңделеді.</p>
                 </div>
 
-                <!-- ЖАҢА КЛАСС ҚОСУ ӨРІСІ МЕН БАТЫРМАЛАРАР -->
                 <div class="flex flex-col sm:flex-row gap-2">
                     <input type="text" id="custom-class-input" placeholder="Жаңа класс атауын жазыңыз..." class="flex-1 px-4 py-2 bg-slate-950 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-cyan-500 text-sm">
                     <button onclick="addClassCustom()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition duration-200 text-sm">
@@ -362,7 +350,6 @@
                     </button>
                 </div>
 
-                <!-- КӘДІМГІ ТІЗІМ ТҮРІНДЕ ШЫҒАРАТЫН БӨЛІМ -->
                 <div class="p-4 bg-slate-950/80 rounded-xl border border-cyan-500/30">
                     <span class="text-xs text-slate-400 block mb-2 uppercase tracking-wider font-semibold">Элемент кластарының тізімі:</span>
                     <ul id="class-list-output" class="list-disc list-inside space-y-1 text-slate-200 text-sm">
@@ -372,8 +359,6 @@
             </div>
         </section>
 
-
-        <!-- Т3 ВКЛАДКАСЫ (3-тапсырма) -->
         <section id="t3" class="tab-content space-y-6">
             <div class="border-b border-slate-700 pb-3">
                 <h2 class="text-2xl font-bold text-emerald-400">3-тапсырма (Т3) — Түсті кесте</h2>
@@ -413,7 +398,6 @@
             </div>
         </section>
 
-        <!-- Т4 ВКЛАДКАСЫ (4-тапсырма) -->
         <section id="t4" class="tab-content space-y-6">
             <div class="border-b border-slate-700 pb-3">
                 <h2 class="text-2xl font-bold text-pink-400">4-тапсырма (Т4) — Қараңғы тақырып</h2>
@@ -498,7 +482,6 @@
             logAndDisplayClasses();
         }
 
-        // ЖАҢА КЛАСС ҚОСУ ФУНКЦИЯСЫ
         function addClassCustom() {
             const box = document.getElementById("demo-box");
             const input = document.getElementById("custom-class-input");
@@ -506,14 +489,13 @@
 
             if (className) {
                 box.classList.add(className);
-                input.value = ""; // Өрісті тазалау
-                logAndDisplayClasses(); // Тізімді автоматты түрде жаңарту
+                input.value = "";
+                logAndDisplayClasses();
             } else {
                 alert("Өтініш, класс атауын енгізіңіз!");
             }
         }
 
-        // КӘДІМГІ ТІЗІМ (<ul><li>) РЕТІНДЕ ШЫҒАРУ ФУНКЦИЯСЫ
         function logAndDisplayClasses() {
             const box = document.getElementById("demo-box");
             const outputList = document.getElementById("class-list-output");
@@ -532,7 +514,6 @@
             });
         }
 
-        // ===== 4-ТАПСЫРМА: ҚАРАҢҒЫ ТАҚЫРЫП =====
         function applyTheme(isDark) {
             document.documentElement.classList.toggle("dark", isDark);
             document.querySelectorAll(".theme-switch").forEach(btn => {
@@ -550,11 +531,9 @@
 
         applyTheme(document.documentElement.classList.contains("dark"));
 
-        // ===== 3-ТАПСЫРМА: ТҮСТІ КЕСТЕ =====
         const PALETTE = ["#ef4444", "#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#ec4899"];
         let selectedColor = PALETTE[0];
 
-        // Кез келген CSS түсін "rgb(r, g, b)" түріне келтіреді (салыстыру үшін)
         function normalizeColor(color) {
             const probe = document.createElement("span");
             probe.style.color = color;
@@ -564,13 +543,11 @@
             return rgb;
         }
 
-        // Фон түсіне қарай мәтін түсін таңдайды (оқылу үшін)
         function textColorFor(rgb) {
             const [r, g, b] = rgb.match(/\d+/g).map(Number);
             return (r * 299 + g * 587 + b * 114) / 1000 > 150 ? "#0f172a" : "#ffffff";
         }
 
-        // Көрсетілген өлшемдегі кесте құрады
         function createTable(rows, cols) {
             const table = document.createElement("table");
             table.className = "color-table";
@@ -584,7 +561,6 @@
             return table;
         }
 
-        // Пайдаланушы енгізген жол/баған санын тексеріп, кестені құрады
         function buildTableFromInputs() {
             const rows = parseInt(document.getElementById("rows-input").value, 10);
             const cols = parseInt(document.getElementById("cols-input").value, 10);
@@ -600,7 +576,6 @@
             document.getElementById("count-result").textContent = "";
         }
 
-        // Ұяшықты таңдалған түске бояйды (сол түс болса — түсті алып тастайды)
         function paintCell(td) {
             const rgb = normalizeColor(selectedColor);
             if (td.dataset.color === rgb) {
@@ -614,7 +589,6 @@
             }
         }
 
-        // Берілген түстегі ұяшықтар санын қайтарады
         function countCellsByColor(color) {
             const target = normalizeColor(color);
             return Array.from(document.querySelectorAll("#table-container td"))
