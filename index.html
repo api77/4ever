@@ -487,7 +487,7 @@
         function logAndDisplayClasses() {
             const classes = [...$("demo-box").classList];
             console.log("Элементтің барлық кластары (console.log):", classes);
-            $("class-list-output").replaceChildren(...classes.map(c => {
+            $("class-list-output").replaceChildren(...classes.map(c => {    
                 const li = document.createElement("li");
                 li.className = "text-cyan-300 font-medium";
                 li.textContent = c;
