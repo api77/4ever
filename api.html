@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRUD — DummyJSON Fake API</title>
+<link rel="stylesheet" href="api.css">
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">&larr; Басты бет</a>
+  <h1>CRUD: Fake API (dummyjson.com)</h1>
+  <p class="mut">Ресурс: <code>https://dummyjson.com/products</code>. Сервер деректі шынымен сақтамайды, жауап қана қайтарады.</p>
+
+  <div class="card">
+    <h2 id="ftitle">Create: жаңа өнім (POST)</h2>
+    <div class="row">
+      <div><label for="title">Атауы</label><input id="title"></div>
+      <div><label for="price">Бағасы</label><input id="price" type="number" step="any"></div>
+      <div><label for="category">Санаты</label><input id="category"></div>
+    </div>
+    <div class="row" style="margin-top:.7rem">
+      <div id="mbox" hidden><label for="method">Әдіс</label><select id="method"><option>PUT</option><option>PATCH</option></select></div>
+      <button class="btn p" id="save" type="button">Сақтау</button>
+      <button class="btn" id="cancel" type="button" hidden>Бас тарту</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Read: өнімдер тізімі (GET)</h2>
+    <div class="row"><div><label for="q">Іздеу</label><input id="q" placeholder="phone"></div><button class="btn" id="sbtn" type="button">Іздеу</button><button class="btn" id="reset" type="button">Барлығы</button></div>
+    <div id="list" aria-live="polite"></div>
+    <div class="row" style="margin-top:.8rem"><button class="btn" id="prev" type="button">&larr;</button><span class="mut" id="pg" style="text-align:center"></span><button class="btn" id="next" type="button">&rarr;</button></div>
+  </div>
+
+  <div class="card">
+    <h2>Сұраныстар және статус кодтар</h2>
+    <div class="scroll"><table id="log"></table></div>
+    <pre id="resp">Әзірге сұраныс жоқ.</pre>
+  </div>
+</div>
+<script src="api.js"></script>
+</body>
+</html>
