@@ -1,9 +1,9 @@
 const BASE = 'https://dummyjson.com';
-const LIM = 5; // бір бетте 5 өнім
+const CATEGORY = 'fragrances'; // тек бір категория: парфюмерия (серверде 5 өнім бар)
 const $ = id => document.getElementById(id);
 const h = (t, a = {}, ...c) => { const e = document.createElement(t); for (const [k, v] of Object.entries(a)) k.startsWith('on') ? e.addEventListener(k.slice(2), v) : k === 'class' ? e.className = v : e.setAttribute(k, v); e.append(...c); return e; };
 
-let items = [], total = 0, skip = 0, query = '', editing = null;
+let all = [], items = [], query = '', editing = null;
 
 // Барлық HTTP сұраныс осы функция арқылы өтеді (статус код консольде ғана)
 async function api(method, path, body) {
@@ -22,11 +22,16 @@ async function api(method, path, body) {
   return { ok, status, data };
 }
 
-// READ
+// READ: тек парфюм категориясы. GET /products/category/fragrances
 async function load() {
-  const path = query ? `/products/search?q=${encodeURIComponent(query)}&limit=${LIM}&skip=${skip}` : `/products?limit=${LIM}&skip=${skip}`;
-  const r = await api('GET', path);
-  items = r.ok ? r.data.products : []; total = r.ok ? r.data.total : 0;
+  const r = await api('GET', '/products/category/' + CATEGORY);
+  all = r.ok ? r.data.products : [];
+  applyFilter();
+}
+
+// Іздеу: 5 өнімнің ішінде бетте сүзіледі
+function applyFilter() {
+  items = all.filter(p => p.title.toLowerCase().includes(query.toLowerCase()));
   renderList();
 }
 
@@ -38,8 +43,6 @@ function renderList() {
       h('button', { class: 'btn', type: 'button', onclick: () => showInfo(p) }, 'GET'),
       h('button', { class: 'btn', type: 'button', onclick: () => openModal(p) }, 'Өзгерту'),
       h('button', { class: 'btn d', type: 'button', onclick: () => remove(p) }, 'Жою')))) : [h('p', { class: 'mut' }, 'Тізім бос.')]));
-  $('pg').textContent = `${total ? skip + 1 : 0}-${skip + items.length} / ${total}`;
-  $('prev').disabled = skip === 0; $('next').disabled = skip + LIM >= total;
 }
 
 // Модальды терезе: p бар болса өңдеу, жоқ болса жаңа өнім
@@ -47,7 +50,7 @@ function openModal(p) {
   editing = p ? p.id : null;
   $('mtitle').textContent = p ? 'Өнімді өңдеу' : 'Жаңа өнім';
   $('mbox').hidden = !p;
-  $('title').value = p ? p.title : ''; $('price').value = p ? p.price : ''; $('category').value = p ? p.category : '';
+  $('title').value = p ? p.title : ''; $('price').value = p ? p.price : ''; $('category').value = p ? p.category : CATEGORY;
   $('modal').showModal();
 }
 
@@ -58,12 +61,12 @@ $('form').addEventListener('submit', async e => {
   $('modal').close();
   if (editing === null) {
     const r = await api('POST', '/products/add', body);
-    if (r.ok) { items.unshift({ ...body, ...r.data, local: true }); total++; }
+    if (r.ok) all.unshift({ ...body, ...r.data, local: true });
   } else {
     const r = await api($('method').value, '/products/' + editing, body);
-    if (r.ok) items = items.map(p => p.id === editing ? { ...p, ...r.data } : p);
+    if (r.ok) all = all.map(p => p.id === editing ? { ...p, ...r.data } : p);
   }
-  renderList();
+  applyFilter();
 });
 
 // READ (бір өнім): GET /products/{id} және ақпаратты модальды терезеде көрсету
@@ -93,15 +96,13 @@ $('iclose').onclick = () => $('info').close();
 // DELETE
 async function remove(p) {
   const r = await api('DELETE', '/products/' + p.id);
-  if (r.ok) { items = items.filter(x => x.id !== p.id); total--; renderList(); }
+  if (r.ok) { all = all.filter(x => x.id !== p.id); applyFilter(); }
 }
 
 $('add').onclick = () => openModal(null);
 $('cancel').onclick = () => $('modal').close();
-$('sbtn').onclick = () => { query = $('q').value.trim(); skip = 0; load(); };
-$('q').onkeydown = e => { if (e.key === 'Enter') $('sbtn').click(); };
-$('reset').onclick = () => { query = ''; $('q').value = ''; skip = 0; load(); };
-$('prev').onclick = () => { skip = Math.max(0, skip - LIM); load(); };
-$('next').onclick = () => { skip += LIM; load(); };
+$('sbtn').onclick = () => { query = $('q').value.trim(); applyFilter(); };
+$('q').oninput = () => { query = $('q').value.trim(); applyFilter(); };
+$('reset').onclick = () => { query = ''; $('q').value = ''; applyFilter(); };
 
 load();
