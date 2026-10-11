@@ -31,6 +31,9 @@
       <div><label for="title">Атауы</label><input id="title" required></div>
       <div><label for="price">Бағасы</label><input id="price" type="number" step="any" required></div>
       <div><label for="category">Санаты</label><input id="category" required></div>
+      <div><label for="imgfile">Сурет (файл)</label><input id="imgfile" type="file" accept="image/*"></div>
+      <div><label for="imgurl">немесе сурет сілтемесі (URL)</label><input id="imgurl" type="url" placeholder="https://..."></div>
+      <img id="preview" class="ibig" alt="" hidden>
       <div id="mbox" hidden><label for="method">Әдіс</label><select id="method"><option>PUT</option><option>PATCH</option></select></div>
     </div>
     <div class="row" style="margin-top:1rem;justify-content:flex-end">
