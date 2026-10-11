@@ -80,64 +80,64 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 /* ---------- ТРЕНДТЕГІ ДУХИЛАР (өз деректеріміз) ----------
    Бағасы — шамамен, USD. Ноталар — брендтің ресми/жалпы белгілі нотала пирамидасы. */
 const TREND = [
-  {title:'Dior Sauvage Eau de Parfum', brand:'Dior', price:135, image: 'https://th.bing.com/th/id/OIP.BUudoIdx77cYqvvm4hLdswHaHZ?w=198&h=197&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2018, family:'Хош иісті, бұйра-ағаштық', season:'Жыл бойы, кешке',
+  {title:'Dior Sauvage Eau de Parfum', brand:'Dior', price:88000, image: 'https://th.bing.com/th/id/OIP.BUudoIdx77cYqvvm4hLdswHaHZ?w=198&h=197&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2018, family:'Хош иісті, бұйра-ағаштық', season:'Жыл бойы, кешке',
    top:['Бергамот'], heart:['Лаванда','Қызғылт бұрыш','Ветивер','Пачули'], base:['Амброксан','Кедр','Ладан смоласы','Ваниль'],
    desc:'Dior-дың ең көп сатылатын ер хош иістерінің бірі: таза бергамот пен жылы ваниль-амбра негізі.'},
-  {title:'Delina', brand:'Parfums de Marly', price:320, image: 'https://th.bing.com/th/id/OIP.MVbRPvyIihmldX3kZw5fkQHaHa?w=192&h=192&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3' gender:'Әйелдерге', conc:'Eau de Parfum', vol:75, year:2017, family:'Гүлді-жемісті', season:'Көктем, күз',
+  {title:'Delina', brand:'Parfums de Marly', price:122000, image: 'https://th.bing.com/th/id/OIP.MVbRPvyIihmldX3kZw5fkQHaHa?w=192&h=192&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Әйелдерге', conc:'Eau de Parfum', vol:75, year:2017, family:'Гүлді-жемісті', season:'Көктем, күз',
    top:['Ревень','Личи','Бергамот','Мускат жаңғағы'], heart:['Түрік раушаны','Пион','Ваниль','Мускус'], base:['Кашмеран','Кедр','Ладан','Ветивер'],
    desc:'Раушан мен личи үйлесімі. Соңғы жылдардағы ең трендтегі нишалық әйел хош иістерінің бірі.'},
-  {title:'Layton', brand:'Parfums de Marly', price:330, gender:'Унисекс', conc:'Eau de Parfum', vol:125, year:2016, family:'Ванильді, хош иісті', season:'Күз, қыс',
+  {title:'Layton', brand:'Parfums de Marly', price:114200, image: 'https://th.bing.com/th?id=OIF.ydL%2fmGAmymIaoZl0lZQIGg&w=208&h=208&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Parfum', vol:125, year:2016, family:'Ванильді, хош иісті', season:'Күз, қыс',
    top:['Алма','Лаванда','Бергамот','Мандарин'], heart:['Герань','Күлгін (фиалка)','Жасмин'], base:['Ваниль','Кардамон','Сандал ағашы','Бұрыш','Пачули'],
    desc:'Алма мен ванильдің жылы, тәтті-дәмдеуішті үйлесімі. Ұзақ сақталады, көздің жауын алады.'},
-  {title:'Baccarat Rouge 540', brand:'Maison Francis Kurkdjian', price:325, gender:'Унисекс', conc:'Eau de Parfum', vol:70, year:2015, family:'Амбра-гүлді', season:'Жыл бойы',
+  {title:'Baccarat Rouge 540', brand:'Maison Francis Kurkdjian', price:164700, image: 'https://th.bing.com/th/id/OIP.-CYuH7hipYKhhtwKq5yh7AHaHa?w=206&h=196&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Parfum', vol:70, year:2015, family:'Амбра-гүлді', season:'Жыл бойы',
    top:['Жасмин','Шафран'], heart:['Амбер ағашы','Амбергрис'], base:['Шырша шайыры','Кедр'],
    desc:'Тәтті, ауалы, минералды іс. Әлемдік әлеуметтік желілердегі ең танымал хош иістердің бірі.'},
-  {title:'Aventus', brand:'Creed', price:445, gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2010, family:'Жемісті-шипрлі', season:'Көктем, жаз',
+  {title:'Aventus', brand:'Creed', price:202500, image: 'https://th.bing.com/th/id/OIP.6w77Dn7OIv77LuGCbQqKcAHaHa?w=213&h=213&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2010, family:'Жемісті-шипрлі', season:'Көктем, жаз',
    top:['Ананас','Бергамот','Қарақат','Алма'], heart:['Қайың','Пачули','Жасмин','Раушан'], base:['Мускус','Емен мүгі','Амбергрис','Ваниль'],
    desc:'Жемістің тәттілігі мен түтінді қайың. Сыйлыққа ең жиі таңдалатын нишалық классика.'},
-  {title:'Libre', brand:'Yves Saint Laurent', price:140, gender:'Әйелдерге', conc:'Eau de Parfum', vol:90, year:2019, family:'Гүлді-ванильді (лаванда)', season:'Жыл бойы',
+  {title:'Libre', brand:'Yves Saint Laurent', price:89600, image: 'https://th.bing.com/th/id/OIP.xG1pBAjmlXqzxejgCshLHgHaHa?w=193&h=193&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Әйелдерге', conc:'Eau de Parfum', vol:90, year:2019, family:'Гүлді-ванильді (лаванда)', season:'Жыл бойы',
    top:['Лаванда','Мандарин','Қара қарақат'], heart:['Апельсин гүлі','Жасмин'], base:['Ваниль','Тонка бұршағы','Мускус','Кедр','Амбергрис'],
    desc:'Лаванда мен апельсин гүлінің ерекше үйлесімі: еркін, батыл, әйелдік.'},
-  {title:'La Vie Est Belle', brand:'Lancôme', price:150, gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:2012, family:'Гурман-гүлді', season:'Күз, қыс',
+  {title:'La Vie Est Belle', brand:'Lancôme', price:56800, image: 'https://th.bing.com/th/id/OIP.fX4K0alVJP8QgTHdZXj2XwHaGg?w=196&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:2012, family:'Гурман-гүлді', season:'Күз, қыс',
    top:['Қара қарақат','Алмұрт'], heart:['Ирис','Жасмин','Апельсин гүлі'], base:['Пралине','Ваниль','Пачули','Тонка бұршағы'],
    desc:'Ирис пен пралине: жұмсақ, тәтті, сүйкімді хош иіс. Күнделікті киюге ыңғайлы.'},
-  {title:'Bleu de Chanel Eau de Parfum', brand:'Chanel', price:150, gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2014, family:'Ағаштық-хош иісті', season:'Жыл бойы',
+  {title:'Bleu de Chanel Eau de Parfum', brand:'Chanel', price:112700, image: 'https://th.bing.com/th/id/OIP.3AqfaQs6TNuyBFeCXBvS-gHaHm?w=194&h=200&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2014, family:'Ағаштық-хош иісті', season:'Жыл бойы',
    top:['Грейпфрут','Лимон','Жалбыз','Қызғылт бұрыш'], heart:['Имбирь','Мускат жаңғағы','Жасмин'], base:['Ладан','Ветивер','Кедр','Сандал ағашы','Пачули'],
    desc:'Таза цитрус пен ағаш: ресми және күнделікті стильге бірдей сай келетін әмбебап хош иіс.'},
-  {title:'Born in Roma Donna', brand:'Valentino', price:130, gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:2019, family:'Гүлді-ванильді', season:'Күз, қыс',
+  {title:'Born in Roma Donna', brand:'Valentino', price:85000, image: 'https://th.bing.com/th/id/OIP.o7JPRQWIslT2elhF1ovvjAHaHa?w=188&h=188&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:2019, family:'Гүлді-ванильді', season:'Күз, қыс',
    top:['Қызғылт бұрыш','Бергамот'], heart:['Жасмин'], base:['Бурбон ванилі','Ағаш (кашмеран)'],
    desc:'Жасмин мен ванильдің заманауи, жұмсақ интерпретациясы.'},
-  {title:'Paradoxe', brand:'Prada', price:125, gender:'Әйелдерге', conc:'Eau de Parfum', vol:90, year:2022, family:'Гүлді-амбралы', season:'Көктем, күз',
+  {title:'Paradoxe', brand:'Prada', price:75400, image: 'https://th.bing.com/th/id/OIP.PxbnNIn2ROGQqrm3xR4e-AHaHa?w=173&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Әйелдерге', conc:'Eau de Parfum', vol:90, year:2022, family:'Гүлді-амбралы', season:'Көктем, күз',
    top:['Неролий','Бергамот','Алмұрт'], heart:['Жасмин','Апельсин гүлі'], base:['Амбра','Ақ мускус'],
    desc:'Гүлдің тазалығы мен амбраның жылулығы. Жаңа буынның трендтегі хош иістерінің бірі.'},
-  {title:'Khamrah', brand:'Lattafa', price:30, gender:'Унисекс', conc:'Eau de Parfum', vol:100, year:2022, family:'Шығыс-гурман (дәмдеуішті)', season:'Күз, қыс',
+  {title:'Khamrah', brand:'Lattafa', price:16800, image: 'https://th.bing.com/th/id/OIP.a-VlOG1ij-Zny04P6c7shQHaHa?w=213&h=213&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',gender:'Унисекс', conc:'Eau de Parfum', vol:100, year:2022, family:'Шығыс-гурман (дәмдеуішті)', season:'Күз, қыс',
    top:['Даршын','Мускат жаңғағы','Бергамот'], heart:['Құрма','Пралине','Тубероза'], base:['Ваниль','Тонка бұршағы','Бензоин','Амбер ағашы','Мирра'],
    desc:'Құрма мен даршынның тәтті-дәмдеуішті хош иісі. Бағасы қолжетімді, танымалдығы өте жоғары.'},
-  {title:'Stronger With You Intensely', brand:'Giorgio Armani', price:115, gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2019, family:'Ванильді-дәмдеуішті', season:'Күз, қыс',
+  {title:'Stronger With You Intensely', brand:'Giorgio Armani', price:52900, image: 'https://th.bing.com/th/id/OIP.j5Av1zpZl2gPrOil0YFUYgHaHa?w=186&h=186&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2019, family:'Ванильді-дәмдеуішті', season:'Күз, қыс',
    top:['Арша (можжевельник)','Қызғылт бұрыш','Күлгін жапырағы','Кардамон'], heart:['Лаванда','Даршын','Ирис'], base:['Ваниль','Амбра','Каштан','Тонка бұршағы'],
    desc:'Каштан мен ваниль: жылы, тәтті, кешкі шығуға лайық ер хош иісі.'},
-  {title:'Tobacco Vanille', brand:'Tom Ford', price:280, gender:'Унисекс', conc:'Eau de Parfum', vol:50, year:2007, family:'Шығыс-ванильді', season:'Күз, қыс',
+  {title:'Tobacco Vanille', brand:'Tom Ford', price:119200, image: 'https://th.bing.com/th/id/OIP.0m38L3m9uKFmGDgH-a8P4gHaHa?w=189&h=189&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Parfum', vol:50, year:2007, family:'Шығыс-ванильді', season:'Күз, қыс',
    top:['Темекі жапырағы','Дәмдеуіштер'], heart:['Ваниль','Тонка бұршағы','Какао','Темекі гүлі'], base:['Кептірілген жемістер','Ағаштық нотлар'],
    desc:'Темекі мен ванильдің бай, жылы және өте тұрақты үйлесімі.'},
-  {title:'Lost Cherry', brand:'Tom Ford', price:390, gender:'Унисекс', conc:'Eau de Parfum', vol:50, year:2018, family:'Шығыс-жемісті', season:'Күз, қыс',
+  {title:'Lost Cherry', brand:'Tom Ford', price:136400, image: 'https://th.bing.com/th/id/OIP.Rx1iFEg7pfel0cEY7cVF7gHaMw?w=190&h=328&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Parfum', vol:50, year:2018, family:'Шығыс-жемісті', season:'Күз, қыс',
    top:['Қара шие','Ащы бадам','Шие ликері'], heart:['Түрік раушаны','Жасмин','Қара өрік'], base:['Тонка бұршағы','Перу бальзамы','Сандал ағашы','Ветивер','Кедр'],
    desc:'Шие мен бадамның тәтті-ащы үйлесімі. Соңғы жылдардағы ең көп талқыланған хош иістердің бірі.'},
-  {title:'Eros', brand:'Versace', price:95, gender:'Ерлерге', conc:'Eau de Toilette', vol:100, year:2012, family:'Хош иісті-фужерлі', season:'Көктем, жаз',
+  {title:'Eros', brand:'Versace', price:78600, image: 'https://th.bing.com/th?id=OIF.%2bCcX9LsWZvmp12e%2fp5smCA&w=280&h=210&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Ерлерге', conc:'Eau de Toilette', vol:100, year:2012, family:'Хош иісті-фужерлі', season:'Көктем, жаз',
    top:['Жалбыз','Жасыл алма','Лимон'], heart:['Тонка бұршағы','Амброксан','Герань'], base:['Ваниль','Кедр','Ветивер','Емен мүгі'],
    desc:'Жалбыз бен ванильдің сергітетін, жастарға арналған классикалық ер хош иісі.'},
-  {title:'Good Girl', brand:'Carolina Herrera', price:140, gender:'Әйелдерге', conc:'Eau de Parfum', vol:80, year:2016, family:'Гүлді-шығыс', season:'Күз, қыс',
+  {title:'Good Girl', brand:'Carolina Herrera', price:63200, image: 'https://th.bing.com/th/id/OIP.Mn623Ea5oz6kvQpdAPXRCwHaHa?w=217&h=217&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Әйелдерге', conc:'Eau de Parfum', vol:80, year:2016, family:'Гүлді-шығыс', season:'Күз, қыс',
    top:['Бадам','Кофе','Бергамот','Лимон'], heart:['Тубероза','Жасмин самбак','Апельсин гүлі','Ирис'], base:['Тонка бұршағы','Какао','Ваниль','Сандал ағашы','Кашмеран'],
    desc:'Тубероза мен какао-кофе үйлесімі. Кешкі образға арналған батыл, тәтті хош иіс.'},
-  {title:'Le Male Elixir', brand:'Jean Paul Gaultier', price:150, gender:'Ерлерге', conc:'Parfum', vol:125, year:2023, family:'Ванильді-хош иісті', season:'Күз, қыс',
+  {title:'Le Male Elixir', brand:'Jean Paul Gaultier', price:75400, image: 'https://th.bing.com/th/id/OIP.Nxof6tmnjXxpn66SbVRluwHaHa?w=198&h=198&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Ерлерге', conc:'Parfum', vol:125, year:2023, family:'Ванильді-хош иісті', season:'Күз, қыс',
    top:['Жалбыз','Лаванда'], heart:['Бал','Темекі жапырағы'], base:['Ваниль','Тонка бұршағы','Бензоин'],
    desc:'Лаванда мен балдың тәтті, қою, ұзақ сақталатын үйлесімі.'},
-  {title:'Erba Pura', brand:'Xerjoff', price:280, gender:'Унисекс', conc:'Eau de Parfum', vol:100, year:2019, family:'Жемісті-амбралы', season:'Көктем, жаз',
+  {title:'Erba Pura', brand:'Xerjoff', price:78000, image: 'https://th.bing.com/th/id/OIP.xYYON7EmOOnn7KTA_rqx1AHaIy?w=171&h=204&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Parfum', vol:100, year:2019, family:'Жемісті-амбралы', season:'Көктем, жаз',
    top:['Сицилия апельсині','Лимон','Бергамот'], heart:['Жемістер'], base:['Ақ мускус','Амбра','Ваниль'],
    desc:'Жеміс пен мускустің тәтті, жұмсақ, ауада ұзақ қалатын хош иісі.'},
-  {title:"Replica By the Fireplace", brand:'Maison Margiela', price:150, gender:'Унисекс', conc:'Eau de Toilette', vol:100, year:2015, family:'Ағаштық-түтінді', season:'Күз, қыс',
+  {title:"Replica By the Fireplace", brand:'Maison Margiela', price:98500, image: 'https://th.bing.com/th/id/OIP.8ck2ZIoIsuroNDBLfylu6QHaHa?w=187&h=187&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Toilette', vol:100, year:2015, family:'Ағаштық-түтінді', season:'Күз, қыс',
    top:['Қалампыр','Қызғылт бұрыш','Апельсин гүлі'], heart:['Каштан','Гваяк ағашы','Кашмеран'], base:['Ваниль','Перу бальзамы','Ақ мускус','Кедр'],
    desc:'Алау жанған каминнің жанындағы қыстық атмосфераны еске түсіретін хош иіс.'},
-  {title:'Cloud', brand:'Ariana Grande', price:70, gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:2018, family:'Гурман-ванильді', season:'Көктем, күз',
+  {title:'Cloud', brand:'Ariana Grande', price:39500, image: 'https://th.bing.com/th/id/OIP.JiSNJdthzwWAlqHDcglJLAHaHa?w=208&h=209&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:2018, family:'Гурман-ванильді', season:'Көктем, күз',
    top:['Лаванда гүлі','Алмұрт','Бергамот'], heart:['Кокос','Пралине','Ванильді орхидея'], base:['Мускус','Ваниль','Сандал ағашы'],
    desc:'Кокос пен пралиненің «бұлттай» жұмсақ, тәтті хош иісі. Жас аудитория ұнатады.'}
 ].map((p, i) => ({id: 't' + (i + 1), category: 'fragrances', local: true, ...p}));
@@ -181,7 +181,16 @@ async function load() {
   } catch (e) {
     $('count').textContent = 'Серверге қосылу мүмкін болмады, тек жергілікті тізім көрсетілді.';
   }
-  items = [...remote.map(p => ({...findDetail(p.title), ...p})), ...TREND.map(p => ({...p}))];
+  const prices = [35000, 85000, 75000, 60000, 65000];
+
+items = [
+  ...remote.map((p, i) => ({
+    ...findDetail(p.title),
+    ...p,
+    price: prices[i]
+  })),
+  ...TREND.map(p => ({...p}))
+];
   show(items);
 }
  
@@ -192,7 +201,7 @@ function show(arr) {
     <div class="it" data-id="${esc(p.id)}">
       <img class="th" src="${esc(imgOf(p))}" alt="" loading="lazy">
       <div class="tx"><b>${esc(p.title)}${p.local ? '<span class="tag">тренд</span>' : ''}</b>
-        <span class="mut">${esc(p.brand || p.category)} / $${esc(p.price)}</span></div>
+        <span class="mut">${esc(p.brand || p.category)} / ${Number(p.price).toLocaleString('ru-RU')} ₸</span></div>
       <div class="acts">
         <button class="btn" data-a="get" type="button">GET</button>
         <button class="btn" data-a="edit" type="button">Өзгерту</button>
@@ -228,7 +237,7 @@ async function info(p) {
     ['Шыққан жылы', p.year],
     ['Хош иіс тобы', p.family],
     ['Маусымы', p.season],
-    ['Бағасы', p.price != null ? '$' + p.price + (p.discountPercentage ? ` (жеңілдік ${p.discountPercentage}%)` : '') : ''],
+    ['Бағасы', p.price != null ? Number(p.price).toLocaleString('ru-RU') + ' ₸' : ''],
     ['Рейтинг', p.rating],
     ['Қоймада', p.stock],
     ['Түрі (tags)', p.tags && p.tags.length ? p.tags.join(', ') : '']
