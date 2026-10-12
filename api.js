@@ -104,7 +104,10 @@ $('form').addEventListener('submit', async e => {
   applyFilter();
 });
 
-// READ (бір өнім): GET /products/{id} және ақпаратты модальды терезеде көрсету
+// READ (бір өнім): GET /products/{id} және ТОЛЫҚ ақпаратты модальды терезеде көрсету
+const fmtDate = s => s ? new Date(s).toLocaleDateString('kk-KZ') : '';
+const stars = n => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
+
 async function showInfo(p) {
   let d = p;
   if (!p.local) { // жергілікті қосылған өнім серверде жоқ, сондықтан сұрамаймыз
@@ -112,18 +115,56 @@ async function showInfo(p) {
     if (!r.ok) return;
     d = r.data;
   }
-  $('iimg').src = d.thumbnail || ''; $('iimg').hidden = !d.thumbnail;
+
+  // Негізгі сурет + кішкентай суреттер галереясы (басқанда үлкейеді)
+  const imgs = (d.images && d.images.length) ? d.images : (d.thumbnail ? [d.thumbnail] : []);
+  $('iimg').src = imgs[0] || ''; $('iimg').hidden = !imgs.length;
+  $('igal').replaceChildren(...(imgs.length > 1
+    ? imgs.map(src => h('img', { class: 'gthumb', src, alt: d.title, onclick: () => { $('iimg').src = src; } }))
+    : []));
   $('ititle').textContent = d.title;
+
+  // Бағасы: жеңілдік болса, жеңілдіктен кейінгі баға да көрсетіледі
+  const disc = d.discountPercentage
+    ? ` (жеңілдік ${d.discountPercentage}% → $${(d.price * (1 - d.discountPercentage / 100)).toFixed(2)})`
+    : '';
+  const dim = d.dimensions ? `${d.dimensions.width} × ${d.dimensions.height} × ${d.dimensions.depth}` : '';
+  const m = d.meta || {};
+
   const rows = [
+    ['ID', d.id],
     ['Категориясы', d.category],
-    ['Бағасы', '$' + d.price + (d.discountPercentage ? ` (жеңілдік ${d.discountPercentage}%)` : '')],
-    ['Түрі (tags)', (d.tags || []).join(', ')],
     ['Бренд', d.brand],
-    ['Рейтинг', d.rating],
-    ['Қоймада', d.stock]
-  ].filter(r => r[1] !== undefined && r[1] !== '');
+    ['Бағасы', '$' + d.price + disc],
+    ['Рейтинг', d.rating !== undefined ? `${d.rating} ${stars(d.rating)}` : undefined],
+    ['Қоймада', d.stock !== undefined ? d.stock + (d.availabilityStatus ? ` (${d.availabilityStatus})` : '') : undefined],
+    ['Ең аз тапсырыс', d.minimumOrderQuantity],
+    ['SKU', d.sku],
+    ['Штрих-код', m.barcode],
+    ['Түрі (tags)', (d.tags || []).join(', ')],
+    ['Өлшемі (E × Б × Т)', dim],
+    ['Салмағы', d.weight],
+    ['Кепілдік', d.warrantyInformation],
+    ['Жеткізу', d.shippingInformation],
+    ['Қайтару саясаты', d.returnPolicy],
+    ['Қосылған күні', fmtDate(m.createdAt)],
+    ['Жаңартылған күні', fmtDate(m.updatedAt)]
+  ].filter(r => r[1] !== undefined && r[1] !== null && r[1] !== '');
   $('idl').replaceChildren(...rows.flatMap(([k, v]) => [h('dt', {}, k), h('dd', {}, String(v))]));
+
   $('idesc').textContent = d.description || '';
+
+  // Пікірлер
+  const revs = d.reviews || [];
+  $('irevh').hidden = !revs.length;
+  $('irevh').textContent = `Пікірлер (${revs.length})`;
+  $('irev').replaceChildren(...revs.map(v => h('div', { class: 'rev' },
+    h('div', { class: 'rev-top' },
+      h('b', {}, v.reviewerName || 'Анонимді'),
+      h('span', { class: 'stars' }, stars(v.rating)),
+      h('span', { class: 'mut' }, fmtDate(v.date))),
+    h('p', { class: 'mut' }, v.comment || ''))));
+
   $('info').showModal();
 }
 $('iclose').onclick = () => $('info').close();
@@ -144,4 +185,4 @@ $('sbtn').onclick = () => { query = $('q').value.trim(); applyFilter(); };
 $('q').oninput = () => { query = $('q').value.trim(); applyFilter(); };
 $('reset').onclick = () => { query = ''; $('q').value = ''; applyFilter(); };
 
-load();s
+load();
