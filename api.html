@@ -5,32 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CRUD — DummyJSON Fake API</title>
 <link rel="stylesheet" href="api.css">
-<style>
-  /* Тек осы беттегі қосымша стильдер */
-  .it{display:flex;align-items:center;gap:14px;padding:12px;margin-top:12px;border:1px solid rgba(120,130,160,.35);border-radius:16px}
-  .it .th{width:64px;height:64px;border-radius:12px;object-fit:contain;background:rgba(120,140,190,.18);flex:none}
-  .it .tx{flex:1;min-width:0}
-  .it .tx b{display:block;font-size:1.05rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .it .acts{display:flex;gap:8px;flex:none}
-  .it .acts .btn{padding:6px 14px;border-radius:999px}
-  .it .acts .del{color:#c0245a}
-  .tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:999px;background:rgba(124,92,255,.15);margin-left:6px;vertical-align:middle}
-  #info{max-width:560px;width:92vw}
-  #info .ibig{display:block;margin:0 auto 10px;max-height:190px;max-width:100%;object-fit:contain}
-  #info .idl{display:grid;grid-template-columns:150px 1fr;gap:8px 14px;margin:12px 0}
-  #info .idl dt{opacity:.75}
-  #info .idl dd{margin:0;font-weight:600}
-  .chips{display:flex;flex-wrap:wrap;gap:6px}
-  .chips span{padding:2px 10px;border-radius:999px;background:rgba(124,92,255,.14);font-weight:500;font-size:.9rem}
-  @media(max-width:560px){.it{flex-wrap:wrap}.it .acts{width:100%}#info .idl{grid-template-columns:1fr}}
-</style>
 </head>
 <body>
 <div class="wrap">
   <a class="back" href="index.html">&larr; Басты бет</a>
   <h1>Парфюмерия: CRUD (dummyjson.com)</h1>
   <p class="mut">Сервер деректі шынымен сақтамайды, өзгерістер тек бетте көрінеді.</p>
- 
+
   <div class="card">
     <div class="row">
       <div><label for="q">Іздеу</label><input id="q" placeholder="Chanel"></div>
@@ -38,11 +19,10 @@
       <button class="btn" id="reset" type="button">Барлығы</button>
       <button class="btn p" id="add" type="button">+ Жаңа өнім</button>
     </div>
-    <p class="mut" id="count"></p>
     <div id="list" aria-live="polite"></div>
   </div>
 </div>
- 
+
 <!-- Бір модальды терезе: жаңа өнім де, өңдеу де осында -->
 <dialog id="modal">
   <form method="dialog" id="form">
@@ -62,7 +42,6 @@
     </div>
   </form>
 </dialog>
- 
 <!-- Өнім туралы ақпарат (GET) -->
 <dialog id="info">
   <img id="iimg" class="ibig" alt="">
@@ -71,254 +50,6 @@
   <p class="mut" id="idesc"></p>
   <div class="row" style="justify-content:flex-end"><button class="btn p" id="iclose" type="button">Жабу</button></div>
 </dialog>
- 
-<script>
-const API = 'https://dummyjson.com/products';
-const $ = id => document.getElementById(id);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- 
-/* ---------- ТРЕНДТЕГІ ДУХИЛАР (өз деректеріміз) ----------
-   Бағасы — шамамен, USD. Ноталар — брендтің ресми/жалпы белгілі нотала пирамидасы. */
-const TREND = [
-  {title:'Dior Sauvage Eau de Parfum', brand:'Dior', price:88000, image: 'https://th.bing.com/th/id/OIP.BUudoIdx77cYqvvm4hLdswHaHZ?w=198&h=197&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2018, family:'Хош иісті, бұйра-ағаштық', season:'Жыл бойы, кешке',
-   top:['Бергамот'], heart:['Лаванда','Қызғылт бұрыш','Ветивер','Пачули'], base:['Амброксан','Кедр','Ладан смоласы','Ваниль'],
-   desc:'Dior-дың ең көп сатылатын ер хош иістерінің бірі: таза бергамот пен жылы ваниль-амбра негізі.'},
-  {title:'Delina', brand:'Parfums de Marly', price:122000, image: 'https://th.bing.com/th/id/OIP.MVbRPvyIihmldX3kZw5fkQHaHa?w=192&h=192&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Әйелдерге', conc:'Eau de Parfum', vol:75, year:2017, family:'Гүлді-жемісті', season:'Көктем, күз',
-   top:['Ревень','Личи','Бергамот','Мускат жаңғағы'], heart:['Түрік раушаны','Пион','Ваниль','Мускус'], base:['Кашмеран','Кедр','Ладан','Ветивер'],
-   desc:'Раушан мен личи үйлесімі. Соңғы жылдардағы ең трендтегі нишалық әйел хош иістерінің бірі.'},
-  {title:'Layton', brand:'Parfums de Marly', price:114200, image: 'https://th.bing.com/th?id=OIF.ydL%2fmGAmymIaoZl0lZQIGg&w=208&h=208&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Parfum', vol:125, year:2016, family:'Ванильді, хош иісті', season:'Күз, қыс',
-   top:['Алма','Лаванда','Бергамот','Мандарин'], heart:['Герань','Күлгін (фиалка)','Жасмин'], base:['Ваниль','Кардамон','Сандал ағашы','Бұрыш','Пачули'],
-   desc:'Алма мен ванильдің жылы, тәтті-дәмдеуішті үйлесімі. Ұзақ сақталады, көздің жауын алады.'},
-  {title:'Baccarat Rouge 540', brand:'Maison Francis Kurkdjian', price:164700, image: 'https://th.bing.com/th/id/OIP.-CYuH7hipYKhhtwKq5yh7AHaHa?w=206&h=196&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Parfum', vol:70, year:2015, family:'Амбра-гүлді', season:'Жыл бойы',
-   top:['Жасмин','Шафран'], heart:['Амбер ағашы','Амбергрис'], base:['Шырша шайыры','Кедр'],
-   desc:'Тәтті, ауалы, минералды іс. Әлемдік әлеуметтік желілердегі ең танымал хош иістердің бірі.'},
-  {title:'Aventus', brand:'Creed', price:202500, image: 'https://th.bing.com/th/id/OIP.6w77Dn7OIv77LuGCbQqKcAHaHa?w=213&h=213&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2010, family:'Жемісті-шипрлі', season:'Көктем, жаз',
-   top:['Ананас','Бергамот','Қарақат','Алма'], heart:['Қайың','Пачули','Жасмин','Раушан'], base:['Мускус','Емен мүгі','Амбергрис','Ваниль'],
-   desc:'Жемістің тәттілігі мен түтінді қайың. Сыйлыққа ең жиі таңдалатын нишалық классика.'},
-  {title:'Libre', brand:'Yves Saint Laurent', price:89600, image: 'https://th.bing.com/th/id/OIP.xG1pBAjmlXqzxejgCshLHgHaHa?w=193&h=193&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Әйелдерге', conc:'Eau de Parfum', vol:90, year:2019, family:'Гүлді-ванильді (лаванда)', season:'Жыл бойы',
-   top:['Лаванда','Мандарин','Қара қарақат'], heart:['Апельсин гүлі','Жасмин'], base:['Ваниль','Тонка бұршағы','Мускус','Кедр','Амбергрис'],
-   desc:'Лаванда мен апельсин гүлінің ерекше үйлесімі: еркін, батыл, әйелдік.'},
-  {title:'La Vie Est Belle', brand:'Lancôme', price:56800, image: 'https://th.bing.com/th/id/OIP.fX4K0alVJP8QgTHdZXj2XwHaGg?w=196&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:2012, family:'Гурман-гүлді', season:'Күз, қыс',
-   top:['Қара қарақат','Алмұрт'], heart:['Ирис','Жасмин','Апельсин гүлі'], base:['Пралине','Ваниль','Пачули','Тонка бұршағы'],
-   desc:'Ирис пен пралине: жұмсақ, тәтті, сүйкімді хош иіс. Күнделікті киюге ыңғайлы.'},
-  {title:'Bleu de Chanel Eau de Parfum', brand:'Chanel', price:112700, image: 'https://th.bing.com/th/id/OIP.3AqfaQs6TNuyBFeCXBvS-gHaHm?w=194&h=200&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2014, family:'Ағаштық-хош иісті', season:'Жыл бойы',
-   top:['Грейпфрут','Лимон','Жалбыз','Қызғылт бұрыш'], heart:['Имбирь','Мускат жаңғағы','Жасмин'], base:['Ладан','Ветивер','Кедр','Сандал ағашы','Пачули'],
-   desc:'Таза цитрус пен ағаш: ресми және күнделікті стильге бірдей сай келетін әмбебап хош иіс.'},
-  {title:'Born in Roma Donna', brand:'Valentino', price:85000, image: 'https://th.bing.com/th/id/OIP.o7JPRQWIslT2elhF1ovvjAHaHa?w=188&h=188&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:2019, family:'Гүлді-ванильді', season:'Күз, қыс',
-   top:['Қызғылт бұрыш','Бергамот'], heart:['Жасмин'], base:['Бурбон ванилі','Ағаш (кашмеран)'],
-   desc:'Жасмин мен ванильдің заманауи, жұмсақ интерпретациясы.'},
-  {title:'Paradoxe', brand:'Prada', price:75400, image: 'https://th.bing.com/th/id/OIP.PxbnNIn2ROGQqrm3xR4e-AHaHa?w=173&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Әйелдерге', conc:'Eau de Parfum', vol:90, year:2022, family:'Гүлді-амбралы', season:'Көктем, күз',
-   top:['Неролий','Бергамот','Алмұрт'], heart:['Жасмин','Апельсин гүлі'], base:['Амбра','Ақ мускус'],
-   desc:'Гүлдің тазалығы мен амбраның жылулығы. Жаңа буынның трендтегі хош иістерінің бірі.'},
-  {title:'Khamrah', brand:'Lattafa', price:16800, image: 'https://th.bing.com/th/id/OIP.a-VlOG1ij-Zny04P6c7shQHaHa?w=213&h=213&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',gender:'Унисекс', conc:'Eau de Parfum', vol:100, year:2022, family:'Шығыс-гурман (дәмдеуішті)', season:'Күз, қыс',
-   top:['Даршын','Мускат жаңғағы','Бергамот'], heart:['Құрма','Пралине','Тубероза'], base:['Ваниль','Тонка бұршағы','Бензоин','Амбер ағашы','Мирра'],
-   desc:'Құрма мен даршынның тәтті-дәмдеуішті хош иісі. Бағасы қолжетімді, танымалдығы өте жоғары.'},
-  {title:'Stronger With You Intensely', brand:'Giorgio Armani', price:52900, image: 'https://th.bing.com/th/id/OIP.j5Av1zpZl2gPrOil0YFUYgHaHa?w=186&h=186&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Ерлерге', conc:'Eau de Parfum', vol:100, year:2019, family:'Ванильді-дәмдеуішті', season:'Күз, қыс',
-   top:['Арша (можжевельник)','Қызғылт бұрыш','Күлгін жапырағы','Кардамон'], heart:['Лаванда','Даршын','Ирис'], base:['Ваниль','Амбра','Каштан','Тонка бұршағы'],
-   desc:'Каштан мен ваниль: жылы, тәтті, кешкі шығуға лайық ер хош иісі.'},
-  {title:'Tobacco Vanille', brand:'Tom Ford', price:119200, image: 'https://th.bing.com/th/id/OIP.0m38L3m9uKFmGDgH-a8P4gHaHa?w=189&h=189&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Parfum', vol:50, year:2007, family:'Шығыс-ванильді', season:'Күз, қыс',
-   top:['Темекі жапырағы','Дәмдеуіштер'], heart:['Ваниль','Тонка бұршағы','Какао','Темекі гүлі'], base:['Кептірілген жемістер','Ағаштық нотлар'],
-   desc:'Темекі мен ванильдің бай, жылы және өте тұрақты үйлесімі.'},
-  {title:'Lost Cherry', brand:'Tom Ford', price:136400, image: 'https://th.bing.com/th/id/OIP.Rx1iFEg7pfel0cEY7cVF7gHaMw?w=190&h=328&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Parfum', vol:50, year:2018, family:'Шығыс-жемісті', season:'Күз, қыс',
-   top:['Қара шие','Ащы бадам','Шие ликері'], heart:['Түрік раушаны','Жасмин','Қара өрік'], base:['Тонка бұршағы','Перу бальзамы','Сандал ағашы','Ветивер','Кедр'],
-   desc:'Шие мен бадамның тәтті-ащы үйлесімі. Соңғы жылдардағы ең көп талқыланған хош иістердің бірі.'},
-  {title:'Eros', brand:'Versace', price:78600, image: 'https://th.bing.com/th?id=OIF.%2bCcX9LsWZvmp12e%2fp5smCA&w=280&h=210&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Ерлерге', conc:'Eau de Toilette', vol:100, year:2012, family:'Хош иісті-фужерлі', season:'Көктем, жаз',
-   top:['Жалбыз','Жасыл алма','Лимон'], heart:['Тонка бұршағы','Амброксан','Герань'], base:['Ваниль','Кедр','Ветивер','Емен мүгі'],
-   desc:'Жалбыз бен ванильдің сергітетін, жастарға арналған классикалық ер хош иісі.'},
-  {title:'Good Girl', brand:'Carolina Herrera', price:63200, image: 'https://th.bing.com/th/id/OIP.Mn623Ea5oz6kvQpdAPXRCwHaHa?w=217&h=217&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Әйелдерге', conc:'Eau de Parfum', vol:80, year:2016, family:'Гүлді-шығыс', season:'Күз, қыс',
-   top:['Бадам','Кофе','Бергамот','Лимон'], heart:['Тубероза','Жасмин самбак','Апельсин гүлі','Ирис'], base:['Тонка бұршағы','Какао','Ваниль','Сандал ағашы','Кашмеран'],
-   desc:'Тубероза мен какао-кофе үйлесімі. Кешкі образға арналған батыл, тәтті хош иіс.'},
-  {title:'Le Male Elixir', brand:'Jean Paul Gaultier', price:75400, image: 'https://th.bing.com/th/id/OIP.Nxof6tmnjXxpn66SbVRluwHaHa?w=198&h=198&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Ерлерге', conc:'Parfum', vol:125, year:2023, family:'Ванильді-хош иісті', season:'Күз, қыс',
-   top:['Жалбыз','Лаванда'], heart:['Бал','Темекі жапырағы'], base:['Ваниль','Тонка бұршағы','Бензоин'],
-   desc:'Лаванда мен балдың тәтті, қою, ұзақ сақталатын үйлесімі.'},
-  {title:'Erba Pura', brand:'Xerjoff', price:78000, image: 'https://th.bing.com/th/id/OIP.xYYON7EmOOnn7KTA_rqx1AHaIy?w=171&h=204&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Parfum', vol:100, year:2019, family:'Жемісті-амбралы', season:'Көктем, жаз',
-   top:['Сицилия апельсині','Лимон','Бергамот'], heart:['Жемістер'], base:['Ақ мускус','Амбра','Ваниль'],
-   desc:'Жеміс пен мускустің тәтті, жұмсақ, ауада ұзақ қалатын хош иісі.'},
-  {title:"Replica By the Fireplace", brand:'Maison Margiela', price:98500, image: 'https://th.bing.com/th/id/OIP.8ck2ZIoIsuroNDBLfylu6QHaHa?w=187&h=187&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Унисекс', conc:'Eau de Toilette', vol:100, year:2015, family:'Ағаштық-түтінді', season:'Күз, қыс',
-   top:['Қалампыр','Қызғылт бұрыш','Апельсин гүлі'], heart:['Каштан','Гваяк ағашы','Кашмеран'], base:['Ваниль','Перу бальзамы','Ақ мускус','Кедр'],
-   desc:'Алау жанған каминнің жанындағы қыстық атмосфераны еске түсіретін хош иіс.'},
-  {title:'Cloud', brand:'Ariana Grande', price:39500, image: 'https://th.bing.com/th/id/OIP.JiSNJdthzwWAlqHDcglJLAHaHa?w=208&h=209&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3', gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:2018, family:'Гурман-ванильді', season:'Көктем, күз',
-   top:['Лаванда гүлі','Алмұрт','Бергамот'], heart:['Кокос','Пралине','Ванильді орхидея'], base:['Мускус','Ваниль','Сандал ағашы'],
-   desc:'Кокос пен пралиненің «бұлттай» жұмсақ, тәтті хош иісі. Жас аудитория ұнатады.'}
-].map((p, i) => ({id: 't' + (i + 1), category: 'fragrances', local: true, ...p}));
- 
-/* ---------- DummyJSON-дағы 5 өнімнің толық сипаттамасы (атауы бойынша сәйкестендіріледі) ---------- */
-const DETAILS = {
-  'calvin klein ck one': {gender:'Унисекс', conc:'Eau de Toilette', vol:100, year:1994, family:'Цитрусты-хош иісті', season:'Көктем, жаз',
-    top:['Бергамот','Лимон','Жасыл шай','Ананас'], heart:['Жасмин','Құлмақ (ландыш)','Күлгін','Мускат жаңғағы'], base:['Мускус','Амбра','Кедр','Сандал ағашы']},
-  'chanel coco noir': {gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:2012, family:'Шығыс-ағаштық', season:'Күз, қыс, кеш',
-    top:['Грейпфрут','Бергамот'], heart:['Раушан','Жасмин'], base:['Пачули','Сандал ағашы','Ваниль','Тонка бұршағы','Мускус']},
-  'dior j\'adore': {gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:1999, family:'Гүлді-жемісті', season:'Жыл бойы',
-    top:['Алмұрт','Қауын','Магнолия','Шабдалы','Мандарин','Бергамот'], heart:['Жасмин','Құлмақ','Тубероза','Фрезия','Раушан','Орхидея'], base:['Мускус','Ваниль','Қарақат','Кедр']},
-  'dolce shine': {gender:'Әйелдерге', conc:'Eau de Parfum', vol:50, family:'Гүлді-жемісті', season:'Көктем, жаз',
-    top:['Манго','Грейпфрут'], heart:['Жасмин','Гүл нотлары'], base:['Мускус']},
-  'gucci bloom': {gender:'Әйелдерге', conc:'Eau de Parfum', vol:100, year:2017, family:'Ақ гүлді', season:'Көктем, жаз',
-    top:['Жасмин','Рангун шырмауығы'], heart:['Тубероза','Жасмин'], base:['Ирис тамыры','Ағаш нотлары']}
-};
-const findDetail = t => { t = (t || '').toLowerCase(); const k = Object.keys(DETAILS).find(k => t.includes(k)); return k ? DETAILS[k] : {}; };
- 
-/* ---------- Сурет (локалды өнімдер үшін SVG құтысы) ---------- */
-function bottle(title, brand) {
-  let h = 0; for (const c of (brand || title)) h = (h * 31 + c.charCodeAt(0)) % 360;
-  const ini = (brand || title).split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 160"><rect x="48" y="8" width="24" height="18" rx="4" fill="hsl(${h},35%,35%)"/><rect x="54" y="26" width="12" height="10" fill="hsl(${h},20%,70%)"/><rect x="22" y="36" width="76" height="112" rx="16" fill="hsl(${h},60%,62%)"/><rect x="22" y="36" width="76" height="112" rx="16" fill="url(#g)" opacity=".35"/><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#000" stop-opacity=".4"/></linearGradient></defs><rect x="36" y="76" width="48" height="36" rx="6" fill="#fff" opacity=".9"/><text x="60" y="101" font-family="Arial" font-weight="700" font-size="18" text-anchor="middle" fill="hsl(${h},40%,25%)">${ini}</text></svg>`;
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
-}
-const imgOf = p => p.thumbnail || p.image || (p.images && p.images[0]) || bottle(p.title, p.brand);
- 
-/* ---------- Күй ---------- */
-let items = [];
-let shown = [];
-let editId = null;      // null → жаңа өнім
-let imgData = '';       // файлдан алынған сурет (dataURL)
- 
-async function load() {
-  $('list').innerHTML = '<p class="mut">Жүктелуде…</p>';
-  let remote = [];
-  try {
-    const r = await fetch(API + '/category/fragrances');
-    remote = (await r.json()).products || [];
-  } catch (e) {
-    $('count').textContent = 'Серверге қосылу мүмкін болмады, тек жергілікті тізім көрсетілді.';
-  }
-  const prices = [35000, 85000, 75000, 60000, 65000];
-
-items = [
-  ...remote.map((p, i) => ({
-    ...findDetail(p.title),
-    ...p,
-    price: prices[i]
-  })),
-  ...TREND.map(p => ({...p}))
-];
-  show(items);
-}
- 
-function show(arr) {
-  shown = arr;
-  if (!$('count').textContent.startsWith('Серверге')) $('count').textContent = `Табылған өнім: ${arr.length}`;
-  $('list').innerHTML = arr.length ? arr.map(p => `
-    <div class="it" data-id="${esc(p.id)}">
-      <img class="th" src="${esc(imgOf(p))}" alt="" loading="lazy">
-      <div class="tx"><b>${esc(p.title)}${p.local ? '<span class="tag">тренд</span>' : ''}</b>
-        <span class="mut">${esc(p.brand || p.category)} / ${Number(p.price).toLocaleString('ru-RU')} ₸</span></div>
-      <div class="acts">
-        <button class="btn" data-a="get" type="button">GET</button>
-        <button class="btn" data-a="edit" type="button">Өзгерту</button>
-        <button class="btn del" data-a="del" type="button">Жою</button>
-      </div>
-    </div>`).join('') : '<p class="mut">Ештеңе табылмады.</p>';
-}
- 
-const byId = id => items.find(p => String(p.id) === String(id));
-const isRemote = p => p && !p.local && typeof p.id === 'number' && p.id <= 194;
- 
-/* ---------- Іздеу ---------- */
-function search() {
-  const q = $('q').value.trim().toLowerCase();
-  $('count').textContent = '';
-  show(!q ? items : items.filter(p => [p.title, p.brand, p.category, p.gender, p.family].join(' ').toLowerCase().includes(q)));
-}
-$('sbtn').onclick = search;
-$('q').addEventListener('keydown', e => { if (e.key === 'Enter') search(); });
-$('reset').onclick = () => { $('q').value = ''; $('count').textContent = ''; show(items); };
- 
-/* ---------- GET: толық ақпарат ---------- */
-async function info(p) {
-  if (isRemote(p)) {
-    try { Object.assign(p, await (await fetch(`${API}/${p.id}`)).json()); } catch (e) {}
-  }
-  const rows = [
-    ['Брендтің атауы', p.brand],
-    ['Санаты', p.category],
-    ['Кімге арналған', p.gender],
-    ['Концентрация', p.conc],
-    ['Көлемі', p.vol ? p.vol + ' мл' : ''],
-    ['Шыққан жылы', p.year],
-    ['Хош иіс тобы', p.family],
-    ['Маусымы', p.season],
-    ['Бағасы', p.price != null ? Number(p.price).toLocaleString('ru-RU') + ' ₸' : ''],
-    ['Рейтинг', p.rating],
-    ['Қоймада', p.stock],
-    ['Түрі (tags)', p.tags && p.tags.length ? p.tags.join(', ') : '']
-  ].filter(r => r[1] !== '' && r[1] != null);
-  const chips = a => `<div class="chips">${a.map(n => `<span>${esc(n)}</span>`).join('')}</div>`;
-  [['Жоғарғы нота', p.top], ['Жүрек нотасы', p.heart], ['Базалық нота', p.base]]
-    .forEach(([l, a]) => { if (a && a.length) rows.push([l, chips(a), true]); });
- 
-  $('iimg').src = imgOf(p);
-  $('ititle').textContent = p.title;
-  $('idl').innerHTML = rows.map(r => `<dt>${esc(r[0])}</dt><dd>${r[2] ? r[1] : esc(r[1])}</dd>`).join('');
-  $('idesc').textContent = p.desc || p.description || '';
-  $('info').showModal();
-}
-$('iclose').onclick = () => $('info').close();
- 
-/* ---------- Қосу / өңдеу терезесі ---------- */
-function openModal(p) {
-  editId = p ? p.id : null;
-  imgData = '';
-  $('mtitle').textContent = p ? 'Өнімді өзгерту' : 'Жаңа өнім';
-  $('mbox').hidden = !p;
-  $('title').value = p ? p.title : '';
-  $('price').value = p ? p.price : '';
-  $('category').value = p ? p.category : 'fragrances';
-  $('imgfile').value = '';
-  $('imgurl').value = p && /^https?:/.test(imgOf(p)) ? imgOf(p) : '';
-  $('preview').hidden = !p;
-  if (p) $('preview').src = imgOf(p);
-  $('modal').showModal();
-}
-$('add').onclick = () => openModal(null);
-$('cancel').onclick = () => $('modal').close();
- 
-$('imgfile').onchange = e => {
-  const f = e.target.files[0]; if (!f) return;
-  const r = new FileReader();
-  r.onload = () => { imgData = r.result; $('preview').src = imgData; $('preview').hidden = false; };
-  r.readAsDataURL(f);
-};
-$('imgurl').oninput = e => { if (e.target.value) { imgData = ''; $('preview').src = e.target.value; $('preview').hidden = false; } };
- 
-$('form').addEventListener('submit', async e => {
-  e.preventDefault();
-  const data = {title: $('title').value.trim(), price: parseFloat($('price').value), category: $('category').value.trim()};
-  const img = imgData || $('imgurl').value.trim();
-  try {
-    if (editId === null) {
-      let created = {};
-      try { created = await (await fetch(API + '/add', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)})).json(); } catch (_) {}
-      items.unshift({...data, thumbnail: img, id: 'n' + Date.now(), local: true, desc: 'Жаңадан қосылған өнім.'});
-    } else {
-      const p = byId(editId);
-      if (isRemote(p)) {
-        try { await fetch(`${API}/${p.id}`, {method: $('method').value, headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)}); } catch (_) {}
-      }
-      Object.assign(p, data);
-      if (img) { p.thumbnail = img; p.image = img; }
-    }
-  } finally {
-    $('modal').close();
-    search();
-  }
-});
- 
-/* ---------- Тізімдегі батырмалар ---------- */
-$('list').addEventListener('click', async e => {
-  const btn = e.target.closest('button[data-a]'); if (!btn) return;
-  const p = byId(btn.closest('.it').dataset.id); if (!p) return;
-  const a = btn.dataset.a;
-  if (a === 'get') info(p);
-  else if (a === 'edit') openModal(p);
-  else if (a === 'del') {
-    if (!confirm(`«${p.title}» өнімін жою керек пе?`)) return;
-    if (isRemote(p)) { try { await fetch(`${API}/${p.id}`, {method: 'DELETE'}); } catch (_) {} }
-    items = items.filter(x => x !== p);
-    search();
-  }
-});
- 
-load();
-</script>
+<script src="api.js"></script>
 </body>
-</html>
+</html> 
