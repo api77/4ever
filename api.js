@@ -2,6 +2,7 @@ const BASE = 'https://dummyjson.com';
 const $ = id => document.getElementById(id);
 const h = (t, a = {}, ...c) => { const e = document.createElement(t); for (const [k, v] of Object.entries(a)) k.startsWith('on') ? e.addEventListener(k.slice(2), v) : k === 'class' ? e.className = v : e.setAttribute(k, v); e.append(...c); return e; };
 
+<<<<<<< HEAD
 let list = [], listUserId = null;      // негізгі беттегі таскілер
 let users = {};                        // авторлар кэші: id -> { username, image, ... }
 let mUserId = null, mUser = null, mTodos = [];   // модальды терезедегі автор және оның таскілері
@@ -9,6 +10,11 @@ let filter = 'all', sort = 'default';            // автор терезесі�
 let lfilter = 'all', lsort = 'default';          // негізгі беттің фильтрі мен сортировкасы
 let editing = null;                    // өзгертіліп жатқан таск id-і (null = жаңа таск)
 let localSeq = 0, reqSeq = 0, mSeq = 0;
+=======
+let all = [], items = [], query = '', editing = null;
+let localSeq = 0;                 // жергілікті өнімдерге бірегей id беру үшін
+let imgData = '', imgReady = null; // таңдалған сурет (base64 немесе URL)
+>>>>>>> dd389c778024e2cf83a9ffbcfb727ac945020a39
 
 // Барлық HTTP сұраныс осы функция арқылы өтеді (статус код консольде ғана)
 async function api(method, path, body, quiet) {
@@ -79,6 +85,7 @@ function renderList() {
   $('list').replaceChildren(...(a.length ? a.map(t => taskRow(t, true)) : [h('p', { class: 'mut' }, 'Тізім бос.')]));
 }
 
+<<<<<<< HEAD
 // Бір таск жолы (тақтадағыдай): ✓ · мәтін · [аватар @ник] · ✕
 function taskRow(t, withNick) {
   const u = users[t.userId];
@@ -158,6 +165,61 @@ async function toggle(t, completed) {
   if (!t.local) {                               // серверде бар таск ғана API арқылы өзгереді
     const r = await api('PATCH', '/todos/' + t.id, { completed });
     if (!r.ok) { renderAll(); return; }
+=======
+// Модальды терезе: p бар болса өңдеу, жоқ болса жаңа өнім
+function openModal(p) {
+  editing = p ? p.id : null;
+  $('mtitle').textContent = p ? 'Өнімді өңдеу' : 'Жаңа өнім';
+  $('mbox').hidden = !p;
+  $('title').value = p ? p.title : ''; $('price').value = p ? p.price : ''; $('category').value = p ? p.category : CATEGORY;
+  $('imgfile').value = ''; $('imgurl').value = ''; imgReady = null;
+  imgData = p && p.thumbnail && !p.thumbnail.startsWith('http') ? p.thumbnail : '';
+  showPreview(p ? p.thumbnail : '');
+  $('modal').showModal();
+}
+
+// Суретті алдын ала көрсету
+function showPreview(src) { $('preview').src = src || ''; $('preview').hidden = !src; }
+
+// Файлды base64 жолына айналдыру (<img src> ішінде тікелей жұмыс істейді)
+const toDataURL = file => new Promise((res, rej) => {
+  const fr = new FileReader();
+  fr.onload = () => res(fr.result); fr.onerror = rej;
+  fr.readAsDataURL(file);
+});
+
+$('imgfile').onchange = () => {
+  const f = $('imgfile').files[0];
+  if (!f) return;
+  $('imgurl').value = '';
+  imgReady = toDataURL(f).then(d => { imgData = d; showPreview(d); });
+};
+$('imgurl').oninput = () => {
+  const u = $('imgurl').value.trim();
+  if (u) { $('imgfile').value = ''; imgReady = null; imgData = u; }
+  showPreview(u);
+};
+
+// CREATE (POST) және UPDATE (PUT/PATCH)
+$('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (imgReady) await imgReady;                  // файл әлі оқылып жатса, күтеміз
+  const body = { title: $('title').value.trim(), price: Number($('price').value), category: $('category').value.trim() };
+  const thumbnail = imgData;                     // суретті серверге жібермейміз (үлкен), тек бетте сақтаймыз
+  $('modal').close();
+  if (editing === null) {
+    const r = await api('POST', '/products/add', body);
+    // сервер әр жаңа өнімге бірдей id (195) береді, сондықтан өз id-мізді қоямыз
+    if (r.ok) all.unshift({ ...body, ...r.data, id: 'local-' + (++localSeq), thumbnail, local: true });
+  } else {
+    const cur = all.find(p => p.id === editing);
+    if (cur.local) {                             // жергілікті өнім: серверде жоқ, бетте ғана өзгертеміз
+      all = all.map(p => p.id === editing ? { ...p, ...body, thumbnail: thumbnail || p.thumbnail } : p);
+    } else {
+      const r = await api($('method').value, '/products/' + editing, body);
+      if (r.ok) all = all.map(p => p.id === editing ? { ...p, ...r.data, thumbnail: thumbnail || p.thumbnail } : p);
+    }
+>>>>>>> dd389c778024e2cf83a9ffbcfb727ac945020a39
   }
   patchLocal(t.id, { completed });
   renderAll();
@@ -199,15 +261,91 @@ $('tform').addEventListener('submit', async e => {
   renderAll();
 });
 
+<<<<<<< HEAD
 /* ---------- DELETE (DELETE /todos/{id}) ---------- */
 async function remove(t) {
   if (!t.local) {
     const r = await api('DELETE', '/todos/' + t.id);
+=======
+// READ (бір өнім): GET /products/{id} және ТОЛЫҚ ақпаратты модальды терезеде көрсету
+const fmtDate = s => s ? new Date(s).toLocaleDateString('kk-KZ') : '';
+const stars = n => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
+
+async function showInfo(p) {
+  let d = p;
+  if (!p.local) { // жергілікті қосылған өнім серверде жоқ, сондықтан сұрамаймыз
+    const r = await api('GET', '/products/' + p.id);
+>>>>>>> dd389c778024e2cf83a9ffbcfb727ac945020a39
     if (!r.ok) return;
   }
+<<<<<<< HEAD
   list = list.filter(x => x.id !== t.id);
   mTodos = mTodos.filter(x => x.id !== t.id);
   renderAll();
+=======
+
+  // Негізгі сурет + кішкентай суреттер галереясы (басқанда үлкейеді)
+  const imgs = (d.images && d.images.length) ? d.images : (d.thumbnail ? [d.thumbnail] : []);
+  $('iimg').src = imgs[0] || ''; $('iimg').hidden = !imgs.length;
+  $('igal').replaceChildren(...(imgs.length > 1
+    ? imgs.map(src => h('img', { class: 'gthumb', src, alt: d.title, onclick: () => { $('iimg').src = src; } }))
+    : []));
+  $('ititle').textContent = d.title;
+
+  // Бағасы: жеңілдік болса, жеңілдіктен кейінгі баға да көрсетіледі
+  const disc = d.discountPercentage
+    ? ` (жеңілдік ${d.discountPercentage}% → $${(d.price * (1 - d.discountPercentage / 100)).toFixed(2)})`
+    : '';
+  const dim = d.dimensions ? `${d.dimensions.width} × ${d.dimensions.height} × ${d.dimensions.depth}` : '';
+  const m = d.meta || {};
+
+  const rows = [
+    ['ID', d.id],
+    ['Категориясы', d.category],
+    ['Бренд', d.brand],
+    ['Бағасы', '$' + d.price + disc],
+    ['Рейтинг', d.rating !== undefined ? `${d.rating} ${stars(d.rating)}` : undefined],
+    ['Қоймада', d.stock !== undefined ? d.stock + (d.availabilityStatus ? ` (${d.availabilityStatus})` : '') : undefined],
+    ['Ең аз тапсырыс', d.minimumOrderQuantity],
+    ['SKU', d.sku],
+    ['Штрих-код', m.barcode],
+    ['Түрі (tags)', (d.tags || []).join(', ')],
+    ['Өлшемі (E × Б × Т)', dim],
+    ['Салмағы', d.weight],
+    ['Кепілдік', d.warrantyInformation],
+    ['Жеткізу', d.shippingInformation],
+    ['Қайтару саясаты', d.returnPolicy],
+    ['Қосылған күні', fmtDate(m.createdAt)],
+    ['Жаңартылған күні', fmtDate(m.updatedAt)]
+  ].filter(r => r[1] !== undefined && r[1] !== null && r[1] !== '');
+  $('idl').replaceChildren(...rows.flatMap(([k, v]) => [h('dt', {}, k), h('dd', {}, String(v))]));
+
+  $('idesc').textContent = d.description || '';
+
+  // Пікірлер
+  const revs = d.reviews || [];
+  $('irevh').hidden = !revs.length;
+  $('irevh').textContent = `Пікірлер (${revs.length})`;
+  $('irev').replaceChildren(...revs.map(v => h('div', { class: 'rev' },
+    h('div', { class: 'rev-top' },
+      h('b', {}, v.reviewerName || 'Анонимді'),
+      h('span', { class: 'stars' }, stars(v.rating)),
+      h('span', { class: 'mut' }, fmtDate(v.date))),
+    h('p', { class: 'mut' }, v.comment || ''))));
+
+  $('info').showModal();
+}
+$('iclose').onclick = () => $('info').close();
+
+// DELETE
+async function remove(p) {
+  if (!p.local) {                                // серверде бар өнім ғана API арқылы жойылады
+    const r = await api('DELETE', '/products/' + p.id);
+    if (!r.ok) return;
+  }
+  all = all.filter(x => x.id !== p.id);
+  applyFilter();
+>>>>>>> dd389c778024e2cf83a9ffbcfb727ac945020a39
 }
 
 /* ---------- Басқару элементтері ---------- */
