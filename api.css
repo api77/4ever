@@ -17,6 +17,8 @@ nav .btn[aria-selected=true]{background:linear-gradient(135deg,#6366f1,#a855f7);
 table{width:100%;border-collapse:collapse;font-size:.85rem}th,td{border-bottom:1px solid var(--bd);padding:.45rem .5rem;text-align:left;vertical-align:top}
 .scroll{overflow-x:auto}
 input,select{background:var(--in);color:var(--fg);border:1px solid var(--bd);border-radius:.6rem;padding:.5rem .7rem;font:inherit;font-size:.9rem;width:100%}
+input[readonly]{opacity:.7;cursor:not-allowed}
+.row>.uidbox{flex:0 0 6.5rem;margin-right:auto}
 label{font-size:.8rem;color:var(--mut);display:block}
 .row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:flex-end}.row>*{flex:1 1 9rem}.row>.btn{flex:0 0 auto}
 .item{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:space-between;align-items:center;border:1px solid var(--bd);border-radius:.75rem;padding:.6rem .8rem;margin-top:.5rem;background:var(--in)}
@@ -47,3 +49,46 @@ dialog::backdrop{background:rgba(15,23,42,.55)}
 .ibig{width:100%;max-height:12rem;object-fit:contain;background:var(--in);border-radius:.75rem}
 .idl{display:grid;grid-template-columns:auto 1fr;gap:.35rem 1rem;margin:.8rem 0}
 .idl dt{color:var(--mut);font-size:.85rem}.idl dd{margin:0;font-weight:600}
+
+/* Сурет жүктеу өрісі */
+input[type=file]{padding:.4rem .5rem;cursor:pointer}
+
+/* GET терезесі: кеңірек, көп мәлімет сыятындай айналдырылады */
+#info{width:min(40rem,94vw);max-height:90vh;overflow-y:auto}
+#info .ibig{max-height:16rem}
+.igal{display:flex;gap:.4rem;overflow-x:auto;margin-top:.5rem}
+.gthumb{width:3.5rem;height:3.5rem;object-fit:contain;background:var(--in);border:1px solid var(--bd);border-radius:.5rem;cursor:pointer;flex:0 0 auto}
+.gthumb:hover{border-color:var(--acc)}
+.rev{border:1px solid var(--bd);background:var(--in);border-radius:.75rem;padding:.55rem .8rem;margin-top:.5rem}
+.rev p{margin:.2rem 0 0}
+.rev-top{display:flex;flex-wrap:wrap;gap:.2rem .7rem;align-items:center}
+.stars{color:#d97706;letter-spacing:.05em}
+
+/* ===== API CRUD: таск жолдары және екіге бөлінген модальды терезе ===== */
+.wrap.wide{max-width:56rem}
+.tcount{margin:.6rem 0 .2rem}
+.task{display:flex;align-items:center;gap:.6rem;border:1px solid var(--bd);border-radius:.75rem;padding:.45rem .6rem;margin-top:.5rem;background:var(--in)}
+.task input[type=checkbox]{width:1.15rem;height:1.15rem;flex:0 0 auto;accent-color:var(--acc);cursor:pointer}
+.ttext{flex:1 1 auto;min-width:0;background:none;border:0;padding:.2rem 0;color:var(--fg);font:inherit;font-size:.9rem;text-align:left;cursor:pointer;overflow-wrap:anywhere}
+.ttext:hover{text-decoration:underline}
+.task.done .ttext{text-decoration:line-through;color:var(--mut)}
+.btn.x{padding:.2rem .5rem;flex:0 0 auto}
+.chip{display:inline-flex;align-items:center;gap:.4rem;flex:0 0 auto;max-width:11rem;border:1px solid var(--bd);background:var(--card);color:var(--acc);border-radius:2rem;padding:.2rem .65rem .2rem .25rem;font:700 .8rem Inter,sans-serif;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip:hover{border-color:var(--acc)}
+.chip:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.avatar{width:3.25rem;height:3.25rem;border-radius:50%;object-fit:cover;background:var(--bd);border:1px solid var(--bd);flex:0 0 auto}
+.avatar.sm{width:1.5rem;height:1.5rem}
+.avatar.big{width:6rem;height:6rem;display:block;margin:0 auto .5rem}
+.tbar{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:flex-end;align-items:center;margin-bottom:.4rem}
+.tool{display:flex;align-items:center;gap:.35rem;font-size:1.1rem;color:var(--mut)}
+.tool select{width:auto;padding:.35rem .5rem;font-size:.8rem}
+.btn.round{width:2.2rem;height:2.2rem;padding:0;border-radius:50%;font-size:1.2rem;line-height:1}
+
+/* Модальды терезе: екіге бөлінген */
+#umodal{width:min(56rem,96vw);max-height:90vh;padding:0;overflow:hidden}
+.split{display:grid;grid-template-columns:1fr 1fr;max-height:90vh}
+.pane{padding:1.25rem;overflow-y:auto;max-height:90vh;min-width:0}
+.pane.author{border-right:1px solid var(--bd)}
+.pane.author h2,.pane.author>.mut{text-align:center;margin-bottom:.2rem}
+.pane.author h2{color:var(--acc);font-size:1.4rem}
+@media (max-width:42rem){.split{grid-template-columns:1fr;overflow-y:auto}.pane{max-height:none;overflow:visible}.pane.author{border-right:0;border-bottom:1px solid var(--bd)}}
