@@ -3,56 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRUD — DummyJSON Fake API</title>
+<title>API CRUD — таскілер және авторлар</title>
 <link rel="stylesheet" href="api.css">
 </head>
 <body>
-<div class="wrap">
+<div class="wrap wide">
   <a class="back" href="index.html">&larr; Басты бет</a>
-  <h1>Парфюмерия: CRUD (dummyjson.com)</h1>
-  <p class="mut">Сервер деректі шынымен сақтамайды, өзгерістер тек бетте көрінеді.</p>
+  <h1>API CRUD: таскілер және авторлар</h1>
+  <p class="mut">dummyjson.com. Сервер деректі шынымен сақтамайды, өзгерістер тек бетте көрінеді. Автордың нигін басыңыз.</p>
 
   <div class="card">
-    <div class="row">
-      <div><label for="q">Іздеу</label><input id="q" placeholder="Chanel"></div>
-      <button class="btn" id="sbtn" type="button">Іздеу</button>
-      <button class="btn" id="reset" type="button">Барлығы</button>
-      <button class="btn p" id="add" type="button">+ Жаңа өнім</button>
+    <form class="row" id="uform">
+      <div><label for="uid">Қолданушы ID (бос қалса — барлығы)</label><input id="uid" type="number" min="1" max="208" placeholder="мысалы, 5"></div>
+      <button class="btn p" type="submit">GET</button>
+    </form>
+
+    <!-- Басты беттегі фильтр, сортировка және жаңа таск батырмасы -->
+    <div class="tbar" style="margin-top:.8rem">
+      <label class="tool" title="Фильтр"><span aria-hidden="true">▽</span>
+        <select id="lflt" aria-label="Фильтр">
+          <option value="all">Барлығы</option>
+          <option value="todo">Орындалмаған</option>
+          <option value="done">Орындалған</option>
+        </select>
+      </label>
+      <label class="tool" title="Сортировка"><span aria-hidden="true">≡</span>
+        <select id="lsrt" aria-label="Сортировка">
+          <option value="default">Әдепкі</option>
+          <option value="az">А → Я</option>
+          <option value="za">Я → А</option>
+          <option value="status">Орындалмағаны алдымен</option>
+        </select>
+      </label>
+      <button class="btn p round" id="ladd" type="button" aria-label="Жаңа таск қосу" title="Жаңа таск">+</button>
     </div>
+
+    <div class="mut tcount" id="lcount"></div>
     <div id="list" aria-live="polite"></div>
   </div>
 </div>
 
-<!-- Бір модальды терезе: жаңа өнім де, өңдеу де осында -->
-<dialog id="modal">
-  <form method="dialog" id="form">
-    <h2 id="mtitle">Жаңа өнім</h2>
+<!-- Автор модальды терезесі: екіге бөлінген (сол жақ — автор, оң жақ — таскілері) -->
+<dialog id="umodal">
+  <div class="split">
+    <section class="pane author">
+      <img id="mimg" class="avatar big" alt="" hidden>
+      <h2 id="mnick"></h2>
+      <p class="mut" id="mname"></p>
+      <dl id="mdl" class="idl"></dl>
+    </section>
+
+    <section class="pane tasks">
+      <div class="tbar">
+        <label class="tool" title="Фильтр"><span aria-hidden="true">▽</span>
+          <select id="flt" aria-label="Фильтр">
+            <option value="all">Барлығы</option>
+            <option value="todo">Орындалмаған</option>
+            <option value="done">Орындалған</option>
+          </select>
+        </label>
+        <label class="tool" title="Сортировка"><span aria-hidden="true">≡</span>
+          <select id="srt" aria-label="Сортировка">
+            <option value="default">Әдепкі</option>
+            <option value="az">А → Я</option>
+            <option value="za">Я → А</option>
+            <option value="status">Орындалмағаны алдымен</option>
+          </select>
+        </label>
+        <button class="btn p round" id="tadd" type="button" aria-label="Жаңа таск қосу" title="Жаңа таск">+</button>
+        <button class="btn round" id="mclose" type="button" aria-label="Жабу" title="Жабу">✕</button>
+      </div>
+      <div class="mut tcount" id="mcount"></div>
+      <div id="mlist" aria-live="polite"></div>
+    </section>
+  </div>
+</dialog>
+
+<!-- Таск қосу / өзгерту -->
+<dialog id="tmodal">
+  <form method="dialog" id="tform">
+    <h2 id="ttitle">Жаңа таск</h2>
     <div class="mfields">
-      <div><label for="title">Атауы</label><input id="title" required></div>
-      <div><label for="price">Бағасы</label><input id="price" type="number" step="any" required></div>
-      <div><label for="category">Санаты</label><input id="category" required></div>
-      <div><label for="imgfile">Сурет (файл)</label><input id="imgfile" type="file" accept="image/*"></div>
-      <div><label for="imgurl">немесе сурет сілтемесі (URL)</label><input id="imgurl" type="url" placeholder="https://..."></div>
-      <img id="preview" class="ibig" alt="" hidden>
-      <div id="mbox" hidden><label for="method">Әдіс</label><select id="method"><option>PUT</option><option>PATCH</option></select></div>
+      <div><label for="ttext">Таск мәтіні</label><input id="ttext" required maxlength="200"></div>
     </div>
     <div class="row" style="margin-top:1rem;justify-content:flex-end">
-      <button class="btn" id="cancel" type="button">Бас тарту</button>
-      <button class="btn p" id="save" type="submit">Сақтау</button>
+      <div class="uidbox"><label for="tuid">Қолданушы ID</label><input id="tuid" type="number" min="1" max="208" required></div>
+      <button class="btn" id="tcancel" type="button">Бас тарту</button>
+      <button class="btn p" type="submit">Сақтау</button>
     </div>
   </form>
 </dialog>
-<!-- Өнім туралы ақпарат (GET) -->
-<dialog id="info">
-  <img id="iimg" class="ibig" alt="">
-  <div id="igal" class="igal"></div>
-  <h2 id="ititle"></h2>
-  <dl id="idl" class="idl"></dl>
-  <p class="mut" id="idesc"></p>
-  <h3 id="irevh" hidden></h3>
-  <div id="irev"></div>
-  <div class="row" style="justify-content:flex-end"><button class="btn p" id="iclose" type="button">Жабу</button></div>
-</dialog>
+
 <script src="api.js"></script>
 </body>
 </html>
